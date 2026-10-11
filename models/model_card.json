@@ -1,0 +1,106 @@
+{
+  "task": "COPD vs non-COPD (disease label, recording level)",
+  "dataset": "ICBHI 2017 Respiratory Sound Database",
+  "synthetic_data": false,
+  "trained_on": "551 training recordings, 79 patients (+ augmented non-COPD copies)",
+  "test_set": "369 recordings, 47 patients never seen in training",
+  "patients_moved_to_train": [
+    156,
+    218
+  ],
+  "preprocessing": {
+    "target_sr": 4000,
+    "bandpass_hz": [
+      100.0,
+      1800.0
+    ],
+    "filter_order": 4,
+    "duration_s": 20.0,
+    "normalisation": "DC removal + peak"
+  },
+  "features": {
+    "type": "MFCC + delta, mean & std over time",
+    "n_mfcc": 40,
+    "n_mels": 64,
+    "n_fft": 512,
+    "hop_length": 128,
+    "dim": 160
+  },
+  "threshold": 0.5,
+  "models": {
+    "svm": {
+      "file": "svm_mfcc.joblib",
+      "label": "SVM (RBF)",
+      "params": {
+        "clf__estimator__C": "10",
+        "clf__estimator__gamma": "scale"
+      },
+      "test_metrics": {
+        "accuracy": 0.9268,
+        "precision": 0.9968,
+        "recall": 0.9228,
+        "f1": 0.9584,
+        "macro_f1": 0.8275,
+        "specificity": 0.9688,
+        "balanced_accuracy": 0.9458,
+        "icbhi_score": 0.9458,
+        "auc": 0.9885,
+        "tn": 31,
+        "fp": 1,
+        "fn": 26,
+        "tp": 311,
+        "n": 369
+      }
+    },
+    "rf": {
+      "file": "rf_mfcc.joblib",
+      "label": "Random Forest",
+      "params": {
+        "clf__max_depth": "8",
+        "clf__min_samples_leaf": "3"
+      },
+      "test_metrics": {
+        "accuracy": 0.9187,
+        "precision": 0.9936,
+        "recall": 0.9169,
+        "f1": 0.9537,
+        "macro_f1": 0.8102,
+        "specificity": 0.9375,
+        "balanced_accuracy": 0.9272,
+        "icbhi_score": 0.9272,
+        "auc": 0.9668,
+        "tn": 30,
+        "fp": 2,
+        "fn": 28,
+        "tp": 309,
+        "n": 369
+      }
+    },
+    "mlp": {
+      "file": "mlp_mfcc.joblib",
+      "label": "MLP",
+      "params": {
+        "clf__alpha": "0.1",
+        "clf__hidden_layer_sizes": "(128, 64)"
+      },
+      "test_metrics": {
+        "accuracy": 0.9377,
+        "precision": 0.9937,
+        "recall": 0.9377,
+        "f1": 0.9649,
+        "macro_f1": 0.8439,
+        "specificity": 0.9375,
+        "balanced_accuracy": 0.9376,
+        "icbhi_score": 0.9376,
+        "auc": 0.9867,
+        "tn": 30,
+        "fp": 2,
+        "fn": 21,
+        "tp": 316,
+        "n": 369
+      }
+    }
+  },
+  "main_model": "svm",
+  "runtime_s": 43.3
+}

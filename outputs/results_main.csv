@@ -1,0 +1,8 @@
+run,model,features,augmentation,accuracy,precision,recall,specificity,f1,macro_f1,auc,icbhi_score,cv_bal_acc_train
+svm_mfcc_aug,SVM (RBF),mfcc,yes,0.9268,0.9968,0.9228,0.9688,0.9584,0.8275,0.9885,0.9458,0.891
+rf_mfcc_aug,Random Forest,mfcc,yes,0.9187,0.9936,0.9169,0.9375,0.9537,0.8102,0.9668,0.9272,0.859
+mlp_mfcc_aug,MLP,mfcc,yes,0.9377,0.9937,0.9377,0.9375,0.9649,0.8439,0.9867,0.9376,0.843
+svm_melspec_aug,SVM (RBF),melspec,yes,0.8726,0.9899,0.8694,0.9062,0.9258,0.7391,0.9692,0.8878,0.913
+svm_chroma_aug,SVM (RBF),chroma,yes,0.6287,0.963,0.6172,0.75,0.7523,0.5059,0.7771,0.6836,0.658
+svm_mfcc_noaug,SVM (RBF),mfcc,no,0.9783,0.991,0.9852,0.9062,0.9881,0.9334,0.9883,0.9457,0.783
+device_only,Device-only baseline (no audio),device name,-,0.9837,1.0,0.9822,1.0,0.991,0.9527,0.9911,0.9911,

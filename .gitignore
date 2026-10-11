@@ -1,0 +1,13 @@
+# Dataset: ~2 GB of audio, licensed by ICBHI - download it yourself (see README)
+data/*
+!data/PUT_DATASET_HERE.txt
+synthetic_data/
+
+# Caches and local environments
+outputs/cache/
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.part
+.ipynb_checkpoints/

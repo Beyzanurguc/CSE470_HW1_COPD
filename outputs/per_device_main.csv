@@ -1,0 +1,5 @@
+device,label_name,recordings,accuracy
+AKGC417L,COPD,277,0.924
+Litt3200,COPD,54,0.981
+Meditron,COPD,6,0.333
+Meditron,non-COPD,32,0.969

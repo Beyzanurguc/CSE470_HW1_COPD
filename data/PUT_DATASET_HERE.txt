@@ -1,0 +1,2 @@
+Unzip the ICBHI / Kaggle respiratory-sound-database here (any sub-folder layout).
+Example: data\Respiratory_Sound_Database\Respiratory_Sound_Database\audio_and_txt_files\101_1b1_Al_sc_Meditron.wav

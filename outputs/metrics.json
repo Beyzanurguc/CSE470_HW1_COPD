@@ -1,0 +1,184 @@
+{
+  "experiment1": [
+    {
+      "run": "svm_mfcc_aug",
+      "model": "SVM (RBF)",
+      "features": "mfcc",
+      "augmentation": "yes",
+      "accuracy": 0.9268,
+      "precision": 0.9968,
+      "recall": 0.9228,
+      "specificity": 0.9688,
+      "f1": 0.9584,
+      "macro_f1": 0.8275,
+      "auc": 0.9885,
+      "icbhi_score": 0.9458,
+      "cv_bal_acc_train": 0.891
+    },
+    {
+      "run": "rf_mfcc_aug",
+      "model": "Random Forest",
+      "features": "mfcc",
+      "augmentation": "yes",
+      "accuracy": 0.9187,
+      "precision": 0.9936,
+      "recall": 0.9169,
+      "specificity": 0.9375,
+      "f1": 0.9537,
+      "macro_f1": 0.8102,
+      "auc": 0.9668,
+      "icbhi_score": 0.9272,
+      "cv_bal_acc_train": 0.859
+    },
+    {
+      "run": "mlp_mfcc_aug",
+      "model": "MLP",
+      "features": "mfcc",
+      "augmentation": "yes",
+      "accuracy": 0.9377,
+      "precision": 0.9937,
+      "recall": 0.9377,
+      "specificity": 0.9375,
+      "f1": 0.9649,
+      "macro_f1": 0.8439,
+      "auc": 0.9867,
+      "icbhi_score": 0.9376,
+      "cv_bal_acc_train": 0.843
+    },
+    {
+      "run": "svm_melspec_aug",
+      "model": "SVM (RBF)",
+      "features": "melspec",
+      "augmentation": "yes",
+      "accuracy": 0.8726,
+      "precision": 0.9899,
+      "recall": 0.8694,
+      "specificity": 0.9062,
+      "f1": 0.9258,
+      "macro_f1": 0.7391,
+      "auc": 0.9692,
+      "icbhi_score": 0.8878,
+      "cv_bal_acc_train": 0.913
+    },
+    {
+      "run": "svm_chroma_aug",
+      "model": "SVM (RBF)",
+      "features": "chroma",
+      "augmentation": "yes",
+      "accuracy": 0.6287,
+      "precision": 0.963,
+      "recall": 0.6172,
+      "specificity": 0.75,
+      "f1": 0.7523,
+      "macro_f1": 0.5059,
+      "auc": 0.7771,
+      "icbhi_score": 0.6836,
+      "cv_bal_acc_train": 0.658
+    },
+    {
+      "run": "svm_mfcc_noaug",
+      "model": "SVM (RBF)",
+      "features": "mfcc",
+      "augmentation": "no",
+      "accuracy": 0.9783,
+      "precision": 0.991,
+      "recall": 0.9852,
+      "specificity": 0.9062,
+      "f1": 0.9881,
+      "macro_f1": 0.9334,
+      "auc": 0.9883,
+      "icbhi_score": 0.9457,
+      "cv_bal_acc_train": 0.783
+    },
+    {
+      "run": "device_only",
+      "model": "Device-only baseline (no audio)",
+      "features": "device name",
+      "augmentation": "-",
+      "accuracy": 0.9837,
+      "precision": 1.0,
+      "recall": 0.9822,
+      "specificity": 1.0,
+      "f1": 0.991,
+      "macro_f1": 0.9527,
+      "auc": 0.9911,
+      "icbhi_score": 0.9911,
+      "cv_bal_acc_train": NaN
+    }
+  ],
+  "best_params": {
+    "svm_mfcc_aug": {
+      "clf__estimator__C": 10,
+      "clf__estimator__gamma": "scale"
+    },
+    "rf_mfcc_aug": {
+      "clf__max_depth": 8,
+      "clf__min_samples_leaf": 3
+    },
+    "mlp_mfcc_aug": {
+      "clf__alpha": 0.1,
+      "clf__hidden_layer_sizes": [
+        128,
+        64
+      ]
+    },
+    "svm_melspec_aug": {
+      "clf__estimator__C": 10,
+      "clf__estimator__gamma": 0.001
+    },
+    "svm_chroma_aug": {
+      "clf__estimator__C": 100,
+      "clf__estimator__gamma": "scale"
+    },
+    "svm_mfcc_noaug": {
+      "clf__estimator__C": 1,
+      "clf__estimator__gamma": "scale"
+    }
+  },
+  "experiment2": [
+    {
+      "model": "SVM + MFCC (pooled out-of-fold)",
+      "accuracy": 0.7243,
+      "precision": 0.6628,
+      "recall": 0.6552,
+      "specificity": 0.7717,
+      "f1": 0.659,
+      "macro_f1": 0.7138,
+      "auc": 0.8162,
+      "icbhi_score": 0.7134
+    },
+    {
+      "model": "SVM + MFCC (mean of folds)",
+      "accuracy": 0.724,
+      "precision": 0.642,
+      "recall": 0.652,
+      "specificity": 0.772,
+      "f1": 0.633,
+      "macro_f1": 0.702,
+      "auc": 0.83,
+      "icbhi_score": 0.712
+    },
+    {
+      "model": "SVM + MFCC (std of folds)",
+      "accuracy": 0.105,
+      "precision": 0.126,
+      "recall": 0.269,
+      "specificity": 0.08,
+      "f1": 0.206,
+      "macro_f1": 0.133,
+      "auc": 0.095,
+      "icbhi_score": 0.13
+    },
+    {
+      "model": "Device-only baseline (pooled)",
+      "accuracy": 0.6636,
+      "precision": 0.5862,
+      "recall": 0.5862,
+      "specificity": 0.7165,
+      "f1": 0.5862,
+      "macro_f1": 0.6514,
+      "auc": 0.5456,
+      "icbhi_score": 0.6514
+    }
+  ]
+}

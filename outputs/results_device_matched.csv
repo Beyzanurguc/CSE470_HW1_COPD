@@ -1,0 +1,5 @@
+model,accuracy,precision,recall,specificity,f1,macro_f1,auc,icbhi_score
+SVM + MFCC (pooled out-of-fold),0.7243,0.6628,0.6552,0.7717,0.659,0.7138,0.8162,0.7134
+SVM + MFCC (mean of folds),0.724,0.642,0.652,0.772,0.633,0.702,0.83,0.712
+SVM + MFCC (std of folds),0.105,0.126,0.269,0.08,0.206,0.133,0.095,0.13
+Device-only baseline (pooled),0.6636,0.5862,0.5862,0.7165,0.5862,0.6514,0.5456,0.6514
