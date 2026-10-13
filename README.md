@@ -128,8 +128,19 @@ taken from the repository https://github.com/raymin0223/patch-mix_contrastive_le
 * This is an educational experiment, **not** a diagnostic tool.
 
 ## 7. AI usage
-Code structure, implementation and this README were drafted with an AI assistant (Claude, Anthropic) and then
-reviewed, run and modified by the author. *(Edit this section to describe your own use precisely.)*
+This project was developed with help from an AI assistant (Claude, Anthropic). We used it to:
+
+1. read and analyse the selected paper and its published notebook (Phase 1),
+2. propose the classification task and the experiment design (patient-disjoint split, device-only baseline),
+3. write most of the Python code, the Streamlit demo and this README,
+4. draft the text of the conference-style paper.
+
+The authors (Beyza Nur Güç, Ahmed Hamza Kerman, Hatice Kübra Aydın) ran all experiments on the real ICBHI data,
+checked the reported numbers against the program output (`outputs/results.md`), and are responsible for the final
+code and text.
+
+## Report
+`report/CSE470_HW1_Report.pdf` – the 2-page conference-style paper describing this code and its results.
 
 ## 8. References
 1. Srivastava et al., PeerJ Comput. Sci. 7:e369, 2021. https://doi.org/10.7717/peerj-cs.369

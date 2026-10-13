@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Can a Computer Hear COPD?</title>
+<style>
+  @page { size: A4; margin: 13mm 14mm 14mm 14mm; }
+  :root {
+    --teal: #0f5c6e; --teal-2: #1d7a8c; --coral: #e2703a; --sand: #f6f1e7; --sand-2: #efe7d8;
+    --ink: #1d2733; --muted: #5b6470; --line: #d9d0bf;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #fff; color: var(--ink); }
+  body { font-family: "Lora", Georgia, serif; font-size: 8.75pt; line-height: 1.38; }
+
+  /* ---------- header ---------- */
+  .kicker { font-family: "Inter", sans-serif; font-size: 7pt; font-weight: 600; letter-spacing: .16em;
+            text-transform: uppercase; color: var(--coral); margin: 0 0 4px; }
+  h1 { font-family: "Lora", serif; font-weight: 700; font-size: 19pt; line-height: 1.12; color: var(--teal);
+       margin: 0 0 2px; letter-spacing: -.01em; }
+  h1 .sub { display: block; font-size: 12.5pt; font-weight: 400; font-style: italic; color: var(--ink); margin-top: 3px; }
+  .wave { display: block; width: 100%; height: 16px; margin: 5px 0 4px; }
+  .authors { font-family: "Inter", sans-serif; font-size: 9.5pt; font-weight: 600; color: var(--ink); }
+  .authors span + span::before { content: "·"; color: var(--coral); margin: 0 7px; font-weight: 700; }
+  .affil { font-family: "Inter", sans-serif; font-size: 7.6pt; color: var(--muted); margin-top: 1px; }
+
+  .abstract { margin: 8px 0 9px; background: var(--sand); border-left: 3px solid var(--teal);
+              padding: 7px 11px 7px 11px; border-radius: 0 6px 6px 0; }
+  .abstract p { margin: 0; font-size: 8.6pt; }
+  .label { font-family: "Inter", sans-serif; font-weight: 700; font-size: 7.4pt; letter-spacing: .1em;
+           text-transform: uppercase; color: var(--teal); margin-right: 5px; }
+  .kw { font-family: "Inter", sans-serif; font-size: 7.4pt; color: var(--muted); margin-top: 4px; }
+
+  /* ---------- body ---------- */
+  .cols { column-count: 2; column-gap: 6.5mm; column-rule: 0.6px solid var(--line); }
+  h2 { font-family: "Inter", sans-serif; font-size: 9.2pt; font-weight: 700; text-transform: uppercase;
+       letter-spacing: .07em; color: var(--teal); margin: 8px 0 3px; break-after: avoid; }
+  h2 .n { display: inline-block; background: var(--coral); color: #fff; border-radius: 9px; font-size: 7.6pt;
+          min-width: 16px; padding: 0 5px; text-align: center; margin-right: 6px; letter-spacing: 0; }
+  .h3 { font-family: "Inter", sans-serif; font-size: 8.2pt; font-weight: 700; color: var(--ink);
+       margin: 0; display: inline; }
+  .h3::after { content: " "; }
+  p { margin: 0 0 4.5px; text-align: left; }
+  ul { margin: 2px 0 5px; padding-left: 13px; }
+  li { margin: 0 0 1px; }
+  li::marker { color: var(--coral); }
+  .cols > h2:first-child { margin-top: 0; }
+  b.t { color: var(--teal); }
+
+  /* ---------- tables ---------- */
+  table { width: 100%; border-collapse: collapse; font-family: "Inter", sans-serif; font-size: 7.15pt;
+          font-variant-numeric: tabular-nums; margin: 2px 0 2px; break-inside: avoid; }
+  thead th { background: var(--teal); color: #fff; font-weight: 600; padding: 2.4px 3px; text-align: right; }
+  thead th:first-child { border-radius: 4px 0 0 0; text-align: left; }
+  thead th:last-child { border-radius: 0 4px 0 0; }
+  td { padding: 2px 3px; text-align: right; border-bottom: 0.5px solid var(--line); }
+  td:first-child, th.l, td.l { text-align: left; }
+  tbody tr:nth-child(even) td { background: #faf7f1; }
+  tr.main td { font-weight: 700; color: var(--teal); background: #e6f0f1 !important; }
+  tr.dev td { color: #9a3f12; background: #fbe9df !important; font-weight: 600; }
+  .tcap, figcaption { font-family: "Inter", sans-serif; font-size: 7.1pt; line-height: 1.3; color: var(--muted); }
+  .tcap { margin: 6px 0 2px; }
+  .tcap b, figcaption b { color: var(--teal); }
+  .tblock { break-inside: avoid; margin-bottom: 6px; }
+
+  figure { margin: 5px 0 7px; break-inside: avoid; }
+  figure img { width: 100%; display: block; }
+  figcaption { margin-top: 2px; }
+
+  .callout { background: #fbe9df; border-radius: 6px; padding: 6px 9px; margin: 5px 0 7px; break-inside: avoid;
+             border: 1px solid #f2c3a8; }
+  .callout p { margin: 0; text-align: left; }
+  .callout .label { color: #b14d1c; }
+
+  .ai { background: var(--sand); border-radius: 6px; padding: 6px 9px; margin: 6px 0 6px; break-inside: avoid; }
+  .ai p { margin: 0; font-size: 8.1pt; }
+
+  .refs { font-size: 7.2pt; line-height: 1.3; padding-left: 0; list-style: none; counter-reset: r; margin: 2px 0 0; }
+  .refs li { counter-increment: r; padding-left: 17px; position: relative; margin-bottom: 2px; text-align: left; }
+  .refs li::before { content: "[" counter(r) "]"; position: absolute; left: 0; color: var(--teal);
+                     font-family: "Inter", sans-serif; font-weight: 600; }
+  a { color: var(--teal); text-decoration: none; }
+  .mono { font-family: "Inter", sans-serif; font-size: 7.6pt; }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="kicker">CSE470 Biomedical Signal Processing · Homework 1 · Fall 2026</p>
+  <h1>Can a Computer Hear COPD?
+    <span class="sub">A simple lung-sound classifier and a hidden device shortcut</span></h1>
+  <svg class="wave" viewBox="0 0 700 16" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 8 H120 C135 8 138 2 146 2 S158 14 166 14 S176 3 184 3 S196 13 204 8 H330
+             C342 8 346 1 354 1 S366 15 374 15 S384 4 392 4 S402 12 410 8 H520
+             C532 8 536 3 544 3 S556 13 564 13 S574 6 582 8 H700"
+          fill="none" stroke="#e2703a" stroke-width="1.6" stroke-linecap="round"/>
+  </svg>
+  <div class="authors"><span>Beyza Nur Güç</span><span>Ahmed Hamza Kerman</span><span>Hatice Kübra Aydın</span></div>
+  <div class="affil">Department of Computer Engineering, İstanbul Sağlık ve Teknoloji Üniversitesi, İstanbul, Türkiye</div>
+
+  <div class="abstract">
+    <p><span class="label">Abstract</span>Chronic obstructive pulmonary disease (COPD) changes the sound of breathing.
+    In this homework we built a small Python system that decides whether a lung-sound recording comes from a COPD
+    patient or not. Our work is inspired by Srivastava et al. [1], who used MFCC features and a CNN on the ICBHI 2017
+    database. We used a simpler pipeline: band-pass filtering, MFCC features and an SVM, and we kept all recordings of
+    a patient in the same partition. On 369 test recordings from 47 unseen patients, the SVM reached 92.7% accuracy,
+    0.92 sensitivity and 0.97 specificity. However, a rule that only reads the name of the recording device, without
+    any audio, scored even higher (98.4% accuracy). When we used only the two devices that recorded both classes, the
+    SVM reached 72.4% accuracy (ICBHI score 0.71). So a large part of the high score comes from the device, not from
+    the lungs.</p>
+    <div class="kw"><span class="label">Keywords</span>lung sounds · COPD · MFCC · SVM · ICBHI 2017 · shortcut learning</div>
+  </div>
+</header>
+
+<main class="cols">
+
+  <h2><span class="n">1</span>Introduction</h2>
+  <p>COPD is a long-term lung disease that makes breathing difficult. Doctors listen to the lungs with a
+  stethoscope, but the result depends on their experience. Automatic analysis of lung sounds could be a cheap first
+  check before tests such as spirometry.</p>
+  <p>We selected the paper by Srivastava et al. [1]. It classifies recordings of the ICBHI 2017 database [2] as COPD or
+  non-COPD, compares five audio features from librosa and trains a CNN. MFCC is its best feature, with an ICBHI score
+  of 0.93. The code is public [3]. While reading the paper and its code, we found some problems: two patients appear in
+  both the training and the test set, the “augmented” samples reuse the features of the original recordings, and the
+  test set is also used as validation data. We therefore built our own small experiment. Our contributions are:</p>
+  <ul>
+    <li>a simple, reproducible pipeline with a patient-disjoint split;</li>
+    <li>a comparison of three classifiers and three feature types;</li>
+    <li>a <i>shortcut check</i> that measures how much the recording device alone can predict.</li>
+  </ul>
+  <p>Our task predicts a <b class="t">disease label</b> (the diagnosis of the patient). It does not detect
+  <b class="t">sound events</b> such as crackles or wheezes, which ICBHI also annotates.</p>
+
+  <h2><span class="n">2</span>Dataset and Method</h2>
+  <p><span class="h3">Data.</span>ICBHI 2017 contains 920 recordings from 126 patients; we used the Kaggle copy [4]. Each recording
+  gets the diagnosis of its patient. We map COPD to 1 and all other diagnoses (healthy, URTI, pneumonia, etc.) to 0.
+  There are 793 COPD and 127 non-COPD recordings, so the data is very unbalanced. We used the official ICBHI
+  train/test split [7], but we moved patients 156 and 218 to the training set because they appeared in both parts
+  (Table 1).</p>
+
+  <div class="tblock">
+    <div class="tcap"><b>Table 1.</b> Recordings (patients) in each partition after the patient-disjoint fix.</div>
+    <table>
+      <thead><tr><th class="l">Partition</th><th>COPD</th><th>non-COPD</th><th>Total</th></tr></thead>
+      <tbody>
+        <tr><td>Train</td><td>456 (39)</td><td>95 (40)</td><td>551 (79)</td></tr>
+        <tr><td>Test</td><td>337 (25)</td><td>32 (22)</td><td>369 (47)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p><span class="h3">Preprocessing.</span>The recordings come from four devices with sampling rates of 4, 10 and 44.1 kHz. We
+  resampled all of them to 4 kHz, so every device has the same 0–2 kHz bandwidth. A 4th-order Butterworth band-pass
+  filter (100–1800 Hz, zero-phase) removes heart sounds and low-frequency noise. Then we removed the DC offset,
+  normalised the peak amplitude to 1, and cut or repeated each signal to exactly 20 s, as in [1].</p>
+
+  <p><span class="h3">Features.</span>We computed a 64-band log-mel spectrogram (128 ms window, 32 ms hop) and 40 MFCCs, the same
+  number as in [1]. Fig. 1 shows two examples. The paper gives the full MFCC image to a CNN. Instead, we take the mean
+  and the standard deviation of each MFCC and of its delta over time, which gives a vector of 160 numbers. For
+  comparison, we also tested log-mel (128 numbers) and chroma (24 numbers) vectors.</p>
+
+  <figure>
+    <img style="width:84%;margin:0 auto" src="fig_logmel.png" alt="Log-mel spectrograms of a non-COPD and a COPD recording">
+    <figcaption><b>Fig. 1.</b> Log-mel spectrograms (20 s, 50–2000 Hz) of one non-COPD (top) and one COPD recording
+    (bottom), both from the Meditron stethoscope. Time runs from left to right; brighter colour means more energy.</figcaption>
+  </figure>
+
+  <p><span class="h3">Classifiers.</span>Instead of the CNN, we used an SVM with an RBF kernel (main model), a Random Forest and a
+  small MLP from scikit-learn [6]; features come from librosa [5]. This keeps the system light and fast on a normal
+  laptop. Each model is a pipeline that starts with a StandardScaler, so scaling is learned from training data only.
+  We chose the hyper-parameters with 4-fold cross-validation inside the training set, grouped by patient. Like [1], we
+  augmented only the non-COPD training recordings (loudness, time mask, time shift, speed; four copies each), but we
+  computed new features from every augmented signal. The test set was used only once.</p>
+
+  <p><span class="h3">Shortcut check.</span>Two devices (AKG C417L and Littmann 3200) recorded only COPD patients. Therefore we added
+  (i) a <i>device-only baseline</i> that predicts COPD from the device name alone, and (ii) <b class="t">Experiment
+  2</b>, which uses only the Meditron and Littmann Classic II SE recordings (214 recordings, 86 patients), where both
+  classes exist. Experiment 2 uses 5-fold patient-grouped cross-validation. <b class="t">Experiment 1</b> is the main
+  test on the official split.</p>
+
+  <h2><span class="n">3</span>Results and Discussion</h2>
+  <p>Table 2 shows the results of Experiment 1. The positive class is COPD and the decision threshold is 0.5.</p>
+
+  <div class="tblock">
+    <div class="tcap"><b>Table 2.</b> Experiment 1, test set (369 recordings, 47 patients). Sens = recall of COPD,
+    Spec = recall of non-COPD.</div>
+    <table>
+      <thead><tr><th class="l">Model</th><th class="l">Features</th><th>Acc</th><th>Prec</th><th>Sens</th><th>Spec</th><th>F1</th><th>AUC</th></tr></thead>
+      <tbody>
+        <tr class="main"><td>SVM</td><td class="l">MFCC</td><td>0.927</td><td>0.997</td><td>0.923</td><td>0.969</td><td>0.958</td><td>0.989</td></tr>
+        <tr><td>Random Forest</td><td class="l">MFCC</td><td>0.919</td><td>0.994</td><td>0.917</td><td>0.938</td><td>0.954</td><td>0.967</td></tr>
+        <tr><td>MLP</td><td class="l">MFCC</td><td>0.938</td><td>0.994</td><td>0.938</td><td>0.938</td><td>0.965</td><td>0.987</td></tr>
+        <tr><td>SVM</td><td class="l">log-mel</td><td>0.873</td><td>0.990</td><td>0.869</td><td>0.906</td><td>0.926</td><td>0.969</td></tr>
+        <tr><td>SVM</td><td class="l">chroma</td><td>0.629</td><td>0.963</td><td>0.617</td><td>0.750</td><td>0.752</td><td>0.777</td></tr>
+        <tr><td>SVM, no aug.</td><td class="l">MFCC</td><td>0.978</td><td>0.991</td><td>0.985</td><td>0.906</td><td>0.988</td><td>0.988</td></tr>
+        <tr class="dev"><td>Device only</td><td class="l">no audio</td><td>0.984</td><td>1.000</td><td>0.982</td><td>1.000</td><td>0.991</td><td>0.991</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p><span class="h3">Main results.</span>MFCC was the best feature, as in [1], and chroma was much weaker. The three classifiers
+  gave similar results. Without augmentation, the SVM found more COPD cases but fewer non-COPD cases (specificity 0.91
+  instead of 0.97). Fig. 2a shows the errors of the main SVM: it missed 26 COPD recordings and gave only one false
+  alarm. Precision is close to 1.0 only because the test set has 337 COPD and just 32 non-COPD recordings; the
+  macro-F1 of the SVM is lower (0.83).</p>
+
+  <figure>
+    <img src="fig_cm.png" alt="Confusion matrices of Experiment 1 and Experiment 2">
+    <figcaption><b>Fig. 2.</b> Confusion matrices of the SVM + MFCC model. (a) Experiment 1, official test set.
+    (b) Experiment 2, Meditron + Littmann C2SE only, pooled over 5 patient-grouped folds.</figcaption>
+  </figure>
+
+  <div class="callout"><p><span class="label">Key finding</span>A rule that never listens to the audio and only
+  reads the device name beats every audio model on the official split (Table 2, Fig. 3).</p></div>
+
+  <p><span class="h3">The device shortcut.</span>The per-device results show the same problem. The SVM classified only 2 of the 6
+  COPD recordings from the Meditron device correctly, but it was right for 92–98% of the COPD recordings from the AKG
+  and Littmann 3200 devices. In Experiment 2, where the device cannot help, the SVM reached 72.4% accuracy, 0.66
+  sensitivity, 0.77 specificity and an AUC of 0.82 (Fig. 2b); the accuracy changed a lot between folds (standard
+  deviation 0.11). This is still better than the device-only baseline (ICBHI score 0.71 vs 0.65), so the audio carries
+  some real COPD information, but much less than Experiment 1 suggests.</p>
+
+  <figure>
+    <img src="fig_shortcut.png" alt="ICBHI score of the SVM and the device-only baseline in both experiments">
+    <figcaption><b>Fig. 3.</b> ICBHI score of the audio model and of the device-only baseline. Without the device
+    shortcut (Exp. 2), the score of the audio model drops from 0.95 to 0.71.</figcaption>
+  </figure>
+
+  <p><span class="h3">Comparison with [1].</span>Our Experiment 1 ICBHI score (0.95) looks close to the 0.93 of [1], but we do not
+  claim a fair comparison: the model, the augmentation and the split are different. The device-only result also shows
+  that this split cannot really measure COPD detection.</p>
+
+  <p><span class="h3">Limitations.</span>(1) The minority class is small: the test set has only 32 non-COPD recordings from 22
+  patients, so one error changes specificity by about 3%. (2) The label is the diagnosis of the patient, not the
+  content of the sound; a COPD recording may sound normal. (3) Other shortcuts may exist. For example, all non-COPD
+  recordings are about 20 s long, while COPD recordings last from 7.9 to 86.2 s; our fixed 20 s length reduces this
+  effect. (4) We did not test the CNN of [1].</p>
+
+  <h2><span class="n">4</span>Conclusion</h2>
+  <p>We built a small and reproducible COPD vs non-COPD classifier for lung sounds with filtering, MFCC features and
+  an SVM. On the official split it looks excellent (92.7% accuracy), but a device-only rule is even better. When we
+  remove the device effect, accuracy falls to about 72%. Our main lesson is that the recording setup can hide inside
+  the results of medical sound data, so simple baselines and patient-level splits are necessary. Next steps are more
+  balanced data from the same device and event-level labels such as crackles and wheezes.</p>
+
+  <div class="ai"><p><span class="label">AI usage</span>We used an AI assistant (Claude, Anthropic) to analyse the
+  paper and its code, to write most of the Python code and the README, and to draft this paper. We ran all
+  experiments on the real data, checked every number against the program output, and we are responsible for the final
+  text. Code: <span class="mono">github.com/Beyzanurguc/CSE470_HW1_COPD</span></p></div>
+
+  <h2><span class="n">R</span>References</h2>
+  <ol class="refs">
+    <li>A. Srivastava, S. Jain, R. Miranda, S. Patil, S. Pandya, K. Kotecha, “Deep learning based respiratory sound
+    analysis for detection of chronic obstructive pulmonary disease,” <i>PeerJ Comput. Sci.</i>, vol. 7, e369, 2021,
+    doi: 10.7717/peerj-cs.369.</li>
+    <li>B. M. Rocha et al., “An open access database for the evaluation of respiratory sound classification
+    algorithms,” <i>Physiol. Meas.</i>, vol. 40, no. 3, 035001, 2019.</li>
+    <li>A. Srivastava, “copd-research,” GitHub repository, github.com/ArpanSriv/copd-research.</li>
+    <li>“Respiratory Sound Database,” Kaggle, kaggle.com/datasets/vbookshelf/respiratory-sound-database.</li>
+    <li>B. McFee et al., “librosa: Audio and music signal analysis in Python,” in <i>Proc. 14th Python in Science
+    Conf.</i>, 2015, pp. 18–25.</li>
+    <li>F. Pedregosa et al., “Scikit-learn: Machine learning in Python,” <i>J. Mach. Learn. Res.</i>, vol. 12,
+    pp. 2825–2830, 2011.</li>
+    <li>ICBHI official split and device-name corrections, from github.com/raymin0223/patch-mix_contrastive_learning
+    (data/icbhi_dataset).</li>
+  </ol>
+</main>
+</body>
+</html>
