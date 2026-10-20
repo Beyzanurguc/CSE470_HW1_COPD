@@ -50,15 +50,19 @@ Re-run `python inspect_data.py` and `python train.py` on the real data afterward
 | `hw1/config.py` | every parameter (sampling rate, filter, window sizes, augmentation, CV folds) |
 | `hw1/data.py` | dataset index, label mapping, patient-disjoint split, device-name correction |
 | `hw1/preprocess.py` | resampling, band-pass, normalisation, trim/pad |
-| `hw1/features.py` | MFCC, log-mel, chroma + time summaries |
+| `hw1/features.py` | MFCC, log-mel, chroma, spectral descriptors, wavelet (DWT) features + time summaries |
 | `hw1/augment.py` | loudness / mask / shift / speed augmentation (training data only) |
 | `hw1/models.py` | SVM, RF, MLP pipelines with patient-grouped hyper-parameter search |
 | `hw1/evaluate.py` | metrics, confusion matrix, ROC plots |
 | `inspect_data.py` | homework steps 3–5: dataset tables + figures |
 | `train.py` | homework steps 6–8: experiments, metrics, saved models |
 | `app.py` | Streamlit demo |
+| `feature_study.py` | extension 1: spectral + wavelet features and their combinations vs. MFCC (both experiments) |
+| `selection_study.py` | extension 2: feature selection (ANOVA, MI, RF, L1, PCA) inside the pipeline |
+| `consistency_study.py` | extension 3: same 5-fold patient-grouped CV for both experiments + device checks |
+| `web/`, `tools/build_web_demo.py` | offline browser demo (`web/COPD_demo.html`, no Python needed) and the script that builds it |
 | `metadata/` | official ICBHI split, diagnoses, device-name corrections (see §6) |
-| `outputs/` | `dataset_summary.md`, `results.md`, CSV tables, `figures/` (created by the scripts) |
+| `outputs/` | `dataset_summary.md`, `results.md`, `results_features.md`, `results_selection.md`, `results_consistency.md`, CSV tables, `figures/` (created by the scripts) |
 | `models/` | trained models + `model_card.json` (created by `train.py`) |
 
 ## 3. What the code does
@@ -99,6 +103,19 @@ patients) inside the training set; the test set is used exactly once. Label = `P
 Metrics: accuracy, precision, recall (= sensitivity), specificity, F1, macro-F1, ROC-AUC, ICBHI score,
 confusion matrices (`outputs/results.md`, `outputs/figures/`).
 
+**Extended experiments (after the presentation).** Run after `train.py`; each takes a few minutes and writes its
+own `outputs/results_*.md`:
+```
+python feature_study.py        # spectral (24) + wavelet (42) features and combinations
+python selection_study.py      # feature selection on all 354 features
+python consistency_study.py    # same 5-fold CV for Exp. 1 and Exp. 2, device checks
+```
+* *Spectral:* mean/std of centroid, bandwidth, roll-off, flatness, flux, ZCR, RMS and 5 contrast bands.
+* *Wavelet:* db4 5-level DWT (PyWavelets) → 6 sub-bands (0–62 Hz … 1–2 kHz) × 7 statistics.
+* *Selection:* the selector is a pipeline step (`scaler → selector → SVM`), so it is fitted on training folds only;
+  the number of kept features is chosen by inner CV.
+* Main result (Exp. 2): spectral + wavelet ICBHI 0.78 vs MFCC 0.71; feature selection gave no clear extra gain.
+
 ## 4. Differences from the paper
 
 | | Paper / published notebook | This project |
@@ -133,18 +150,22 @@ This project was developed with help from an AI assistant (Claude, Anthropic). W
 1. read and analyse the selected paper and its published notebook (Phase 1),
 2. propose the classification task and the experiment design (patient-disjoint split, device-only baseline),
 3. write most of the Python code, the Streamlit demo and this README,
-4. draft the text of the conference-style paper.
+4. draft the text of the conference-style paper,
+5. design and code the extended experiments (new features, feature selection, same CV) and the offline web demo.
 
 The authors (Beyza Nur Güç, Ahmed Hamza Kerman, Hatice Kübra Aydın) ran all experiments on the real ICBHI data,
-checked the reported numbers against the program output (`outputs/results.md`), and are responsible for the final
+checked the reported numbers against the program output (`outputs/results*.md`), and are responsible for the final
 code and text.
 
 ## Report
-`report/CSE470_HW1_Report.pdf` – the 2-page conference-style paper describing this code and its results.
+* `report/CSE470_HW1_Report_v2.pdf` – current version: the conference-style paper with Section 4 "Extended Experiments".
+* `report/CSE470_HW1_Report.pdf` – the first (submitted) 2-page version.
+* `report/source/` – HTML source and figures of the paper.
 
 ## 8. References
 1. Srivastava et al., PeerJ Comput. Sci. 7:e369, 2021. https://doi.org/10.7717/peerj-cs.369
 2. B. M. Rocha et al., "An open access database for the evaluation of respiratory sound classification
    algorithms", *Physiological Measurement* 40(3):035001, 2019 (ICBHI 2017 database).
 3. Kaggle mirror: https://www.kaggle.com/datasets/vbookshelf/respiratory-sound-database
+4. G. R. Lee et al., "PyWavelets: A Python package for wavelet analysis", *J. Open Source Softw.* 4(36):1237, 2019.
 4. McFee et al., librosa; Pedregosa et al., scikit-learn, JMLR 12, 2011.
