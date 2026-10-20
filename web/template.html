@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>COPD Lung Sound Demo</title>
+<style>
+:root{
+  --teal:#0f5c6e; --teal-2:#1d7a8c; --teal-soft:#e4eff1; --coral:#e2703a; --coral-soft:#fbe9df; --coral-ink:#9a3f12;
+  --sand:#f6f1e7; --sand-2:#efe7d8; --paper:#fcfbf8; --ink:#1d2733; --muted:#5b6470; --line:#e2dccf; --ok:#0b6b45; --okbg:#e3f4ec; --bad:#8a2a12; --badbg:#fde8e4;
+  --serif: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+  --sans: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+  color-scheme: light;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.45}
+button,select,input{font:inherit;color:inherit}
+header{background:var(--teal);color:#fff;padding:18px 28px 16px;position:relative;overflow:hidden}
+header .kicker{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:#ffd2bb;font-weight:600}
+header h1{font-family:var(--serif);font-weight:700;font-size:28px;margin:2px 0 2px;letter-spacing:-.01em}
+header p{margin:0;color:#d5e7ea;font-size:13.5px}
+header svg.wave{position:absolute;right:-10px;top:10px;width:420px;height:80px;opacity:.55}
+.banner{background:var(--coral-soft);color:var(--coral-ink);border:1px solid #f2c3a8;border-radius:10px;padding:10px 14px;margin:0 0 14px}
+.layout{display:grid;grid-template-columns:270px minmax(0,1fr);gap:0;min-height:calc(100vh - 92px)}
+aside{background:var(--sand);border-right:1px solid var(--line);padding:20px 18px}
+aside h3{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);margin:0 0 10px}
+.radio{display:flex;flex-direction:column;gap:6px;margin-bottom:18px}
+.radio label{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:9px;cursor:pointer;border:1px solid transparent}
+.radio label:hover{background:#fff}
+.radio input{accent-color:var(--teal)}
+.radio label.on{background:#fff;border-color:var(--line);font-weight:600}
+.slider{margin:4px 0 18px}
+.slider .row{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+.slider .val{font-weight:700;color:var(--teal);font-size:15px}
+input[type=range]{width:100%;accent-color:var(--coral)}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tile{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+.tile .k{font-size:11.5px;color:var(--muted)}
+.tile .v{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--ink)}
+.side-note{font-size:12px;color:var(--muted);margin-top:14px;line-height:1.4}
+main{padding:18px 28px 40px;min-width:0}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:18px;flex-wrap:wrap}
+.tab{background:none;border:none;padding:10px 14px;cursor:pointer;color:var(--muted);font-weight:600;border-bottom:3px solid transparent;margin-bottom:-1px}
+.tab.on{color:var(--teal);border-bottom-color:var(--coral)}
+.panel{display:none}.panel.on{display:block}
+h2{font-family:var(--serif);font-size:21px;margin:0 0 12px;color:var(--ink)}
+h2 .n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--coral);color:#fff;font-family:var(--sans);font-size:13px;margin-right:8px;vertical-align:3px}
+h4{margin:18px 0 8px;font-size:14px;color:var(--teal);text-transform:uppercase;letter-spacing:.08em}
+.grid2{display:grid;grid-template-columns:minmax(260px,330px) minmax(0,1fr);gap:26px;align-items:start}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+.seg{display:flex;background:var(--sand);border-radius:10px;padding:3px;margin-bottom:12px}
+.seg button{flex:1;border:none;background:none;padding:7px 6px;border-radius:8px;cursor:pointer;font-size:13.5px;color:var(--muted);font-weight:600}
+.seg button.on{background:#fff;color:var(--teal);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+label.f{display:block;font-size:12.5px;color:var(--muted);margin:8px 0 4px}
+select{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:#fff}
+.filters{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn{width:100%;margin-top:10px;padding:9px;border-radius:9px;border:1px solid var(--line);background:#fff;cursor:pointer;font-weight:600}
+.btn:hover{border-color:var(--teal);color:var(--teal)}
+audio{width:100%;margin-top:6px;height:36px}
+.drop{display:block;border:2px dashed var(--line);border-radius:12px;padding:20px 12px;text-align:center;color:var(--muted);cursor:pointer;background:var(--paper)}
+.drop:hover,.drop.over{border-color:var(--teal);color:var(--teal)}
+.result{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:16px;align-items:start}
+.rcard{border-radius:14px;color:#fff;padding:16px 20px}
+.rcard .l{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;opacity:.9}
+.rcard .v{font-size:32px;font-weight:800;line-height:1.1;margin:2px 0}
+.rcard .s{font-size:14px;opacity:.95}
+.pbar{position:relative;height:12px;background:var(--sand-2);border-radius:99px;margin:12px 0 4px;overflow:visible}
+.pbar .fill{position:absolute;left:0;top:0;bottom:0;border-radius:99px}
+.pbar .thr{position:absolute;top:-5px;bottom:-5px;width:2px;background:var(--ink)}
+.pbar-lbl{display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}
+.pill{display:inline-block;padding:2px 10px;border-radius:99px;font-size:13px;font-weight:700}
+.pill.ok{background:var(--okbg);color:var(--ok)}.pill.bad{background:var(--badbg);color:var(--bad)}
+.meta{font-size:14px;line-height:1.7}
+.meta .m{color:var(--muted);font-size:12.5px}
+.warn{background:#fff6dc;border:1px solid #f0d98a;color:#6b5300;border-radius:10px;padding:10px 12px;font-size:13.5px;margin-top:12px}
+.subtabs{display:flex;gap:6px;margin:6px 0 10px;flex-wrap:wrap}
+.subtabs button{border:1px solid var(--line);background:#fff;border-radius:99px;padding:5px 12px;cursor:pointer;font-size:13px;font-weight:600;color:var(--muted)}
+.subtabs button.on{background:var(--teal);border-color:var(--teal);color:#fff}
+canvas{width:100%;display:block;background:#fff;border-radius:10px}
+.cap{font-size:12.5px;color:var(--muted);margin-top:6px}
+details{margin-top:14px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+summary{cursor:pointer;font-weight:600;color:var(--teal)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;font-variant-numeric:tabular-nums}
+thead th{background:var(--teal);color:#fff;font-weight:600;text-align:right;padding:7px 8px;white-space:nowrap}
+thead th:first-child{text-align:left;border-radius:8px 0 0 0}thead th:last-child{border-radius:0 8px 0 0}
+td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:right}
+td.l,th.l{text-align:left}
+tbody tr:nth-child(even) td{background:#faf7f1}
+tr.main td{background:var(--teal-soft)!important;font-weight:700;color:var(--teal)}
+tr.dev td{background:var(--coral-soft)!important;color:var(--coral-ink);font-weight:700}
+.tw{overflow-x:auto;border-radius:8px}
+.callout{background:var(--coral-soft);border:1px solid #f2c3a8;border-radius:12px;padding:12px 14px;margin:14px 0;color:#5c2a10}
+.callout b{color:var(--coral-ink)}
+.kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:8px 0 12px}
+.kpis .tile .v{font-size:21px}
+.cm{display:grid;grid-template-columns:auto 1fr 1fr;gap:4px;max-width:360px;font-size:13px}
+.cm .h{color:var(--muted);text-align:center;font-size:12px;align-self:end}
+.cm .r{color:var(--muted);font-size:12px;align-self:center;text-align:right;padding-right:6px}
+.cm .c{border-radius:8px;padding:14px 6px;text-align:center;font-weight:700;font-size:16px}
+.cm .c small{display:block;font-weight:500;font-size:12px;opacity:.85}
+.row2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;align-items:start}
+.legend{display:flex;gap:16px;font-size:12.5px;color:var(--muted);margin:4px 0}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.stat{display:flex;gap:10px;margin-bottom:12px}
+.stat .tile{flex:1}
+.prose{max-width:860px}.prose p{margin:0 0 10px}
+.busy{opacity:.55;pointer-events:none}
+.hint{font-size:12.5px;color:var(--muted);margin-top:8px}
+@media (max-width: 980px){
+  .layout{grid-template-columns:1fr}
+  aside{border-right:none;border-bottom:1px solid var(--line)}
+  .grid2,.result,.row2{grid-template-columns:1fr}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  header svg.wave{display:none}
+  main{padding:16px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="kicker">CSE470 Biomedical Signal Processing · HW1 · offline demo</div>
+  <h1>COPD detection from lung sounds</h1>
+  <p>Simplified experiment inspired by Srivastava et al., <i>PeerJ Computer Science</i> 7:e369 (2021) · ICBHI 2017 dataset · Beyza Nur Güç, Ahmed Hamza Kerman, Hatice Kübra Aydın</p>
+  <svg class="wave" viewBox="0 0 420 80" aria-hidden="true"><path d="M0 40 H60 C72 40 76 12 86 12 S100 68 110 68 S122 20 132 20 S144 56 152 40 H220 C232 40 236 6 246 6 S260 74 270 74 S282 24 292 24 S302 52 310 40 H420" fill="none" stroke="#e2703a" stroke-width="3" stroke-linecap="round"/></svg>
+</header>
+
+<div class="layout">
+  <aside>
+    <h3>Model</h3>
+    <div class="radio" id="modelRadio"></div>
+    <h3>Decision threshold</h3>
+    <div class="slider">
+      <div class="row"><span>P(COPD) ≥</span><span class="val" id="thrVal">0.50</span></div>
+      <input type="range" id="thr" min="0.05" max="0.95" step="0.05" value="0.5" aria-label="Decision threshold">
+      <div class="row"><span>more sensitive</span><span>more specific</span></div>
+    </div>
+    <h3 id="tilesTitle">Held-out test set</h3>
+    <div class="tiles">
+      <div class="tile"><div class="k">Sensitivity</div><div class="v" id="tSens">–</div></div>
+      <div class="tile"><div class="k">Specificity</div><div class="v" id="tSpec">–</div></div>
+      <div class="tile"><div class="k">F1 (COPD)</div><div class="v" id="tF1">–</div></div>
+      <div class="tile"><div class="k">AUC</div><div class="v" id="tAuc">–</div></div>
+    </div>
+    <div class="side-note" id="sideNote"></div>
+    <div class="side-note">Educational demo — not a medical device.</div>
+  </aside>
+
+  <main>
+    <div id="synthBanner"></div>
+    <nav class="tabs" role="tablist">
+      <button class="tab on" data-tab="predict">🔍 Predict</button>
+      <button class="tab" data-tab="results">📊 Results</button>
+      <button class="tab" data-tab="dataset">🗂️ Dataset</button>
+      <button class="tab" data-tab="about">ℹ️ About</button>
+    </nav>
+
+    <!-- ===================================================== PREDICT -->
+    <section class="panel on" id="p-predict">
+      <div class="grid2">
+        <div class="card">
+          <h2><span class="n">1</span>Choose a recording</h2>
+          <div class="seg"><button class="on" data-src="test">Test-set example</button><button data-src="upload">Upload WAV</button></div>
+          <div id="srcTest">
+            <div class="filters">
+              <div><label class="f" for="fClass">True class</label><select id="fClass"><option>All</option><option>COPD</option><option>non-COPD</option></select></div>
+              <div><label class="f" for="fDev">Device</label><select id="fDev"><option>All</option></select></div>
+            </div>
+            <button class="btn" id="rand">🎲 Random recording</button>
+            <label class="f" for="pick" id="pickLbl">Recording</label>
+            <select id="pick"></select>
+            <div class="hint">Recordings from patients that the model never saw during training.</div>
+          </div>
+          <div id="srcUp" style="display:none">
+            <label class="drop" id="drop"><input type="file" id="file" accept=".wav,audio/wav" hidden>
+              <b>Drop a WAV file here</b><br>or click to choose<br><span class="hint">Processed fully in your browser</span></label>
+          </div>
+          <div id="origWrap" style="display:none"><label class="f">Original audio</label><audio id="origAudio" controls></audio></div>
+        </div>
+
+        <div>
+          <h2><span class="n">2</span>Result</h2>
+          <div id="resultBox" class="card"><span class="hint">Pick or upload a recording on the left.</span></div>
+          <div id="seesBox" style="display:none">
+            <h2 style="margin-top:22px"><span class="n">3</span>What the model sees</h2>
+            <div class="subtabs" id="viewTabs">
+              <button class="on" data-v="wave">Waveform</button><button data-v="filter">Band-pass filter</button>
+              <button data-v="mel">Log-mel spectrogram</button><button data-v="mfcc">MFCC</button>
+            </div>
+            <div class="card">
+              <div data-view="wave"><canvas id="cWave" height="300"></canvas>
+                <label class="f">Preprocessed audio (what the classifier hears)</label><audio id="preAudio" controls></audio></div>
+              <div data-view="filter" style="display:none"><canvas id="cSpec" height="260"></canvas>
+                <div class="cap">Below 100 Hz: heart sounds, muscle and handling noise. The upper edge stays below the 2 kHz Nyquist limit of the common 4 kHz rate.</div></div>
+              <div data-view="mel" style="display:none"><canvas id="cMel" height="260"></canvas>
+                <div class="cap" id="melCap"></div></div>
+              <div data-view="mfcc" style="display:none"><canvas id="cMfcc" height="260"></canvas>
+                <div class="cap" id="mfccCap"></div></div>
+            </div>
+            <details><summary>Pipeline parameters</summary><div class="tw" style="margin-top:10px"><table id="paramTbl"></table></div></details>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================== RESULTS -->
+    <section class="panel" id="p-results">
+      <h2>Experiment 1 · official ICBHI split, patient-disjoint</h2>
+      <div class="tw"><table id="tblMain"></table></div>
+      <div class="callout" id="shortcutBox"></div>
+
+      <h4>Threshold explorer</h4>
+      <div class="kpis">
+        <div class="tile"><div class="k">Accuracy</div><div class="v" id="xAcc"></div></div>
+        <div class="tile"><div class="k">Sensitivity</div><div class="v" id="xSens"></div></div>
+        <div class="tile"><div class="k">Specificity</div><div class="v" id="xSpec"></div></div>
+        <div class="tile"><div class="k">F1 (COPD)</div><div class="v" id="xF1"></div></div>
+        <div class="tile"><div class="k">Macro F1</div><div class="v" id="xMf1"></div></div>
+      </div>
+      <div class="row2">
+        <div><div id="cmBox"></div><div class="cap" id="cmCap"></div></div>
+        <div><div class="legend"><span><i style="background:#0f5c6e"></i>Audio model (SVM + MFCC)</span><span><i style="background:#e2703a"></i>Device name only</span></div>
+          <div id="shortcutChart"></div>
+          <div class="cap">ICBHI score = (sensitivity + specificity) / 2. Dashed line = chance.</div></div>
+      </div>
+
+      <h4>Main model accuracy per device (test set)</h4>
+      <div class="tw" style="max-width:560px"><table id="tblDev"></table></div>
+
+      <h2 style="margin-top:26px">Experiment 2 · Meditron + Littmann Classic II SE only</h2>
+      <p class="hint" style="margin-top:-6px">Both classes recorded with the same devices · 5-fold patient-grouped cross-validation · no augmentation — the more honest estimate of what the audio itself carries.</p>
+      <div class="tw"><table id="tblDm"></table></div>
+    </section>
+
+    <!-- ===================================================== DATASET -->
+    <section class="panel" id="p-dataset">
+      <div class="stat" id="dsStats"></div>
+      <div class="row2">
+        <div>
+          <h4>Recordings per diagnosis</h4><div class="tw"><table id="tblDx"></table></div>
+          <h4>Classes per partition</h4><div class="tw"><table id="tblSplit"></table></div>
+          <h4>Native sampling rate per device (Hz)</h4><div class="tw"><table id="tblSr"></table></div>
+        </div>
+        <div>
+          <h4>Recording device per class</h4>
+          <div class="legend"><span><i style="background:#2a78d6"></i>non-COPD</span><span><i style="background:#e2703a"></i>COPD</span></div>
+          <div id="devChart"></div>
+          <div class="callout"><b>Confound:</b> AKG C417L and Littmann 3200 recorded only COPD patients. Non-COPD recordings exist only on Meditron and Littmann Classic II SE.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================== ABOUT -->
+    <section class="panel prose" id="p-about"></section>
+  </main>
+</div>
+
+<script>/*__DSP__*/</script>
+<script>
+"use strict";
+const DATA = /*__DATA__*/null;
+const C = DATA.cfg, CARD = DATA.card;
+const COL = {COPD:"#e2703a","non-COPD":"#2a78d6"}, TEAL="#0f5c6e", CORAL="#e2703a";
+const DEV_NAMES = {AKGC417L:"AKG C417L microphone",LittC2SE:"Littmann Classic II SE",Litt3200:"Littmann 3200 electronic",Meditron:"WelchAllyn Meditron"};
+const LOC = {Tc:"trachea",Al:"anterior left",Ar:"anterior right",Pl:"posterior left",Pr:"posterior right",Ll:"lateral left",Lr:"lateral right"};
+const LABELS = {svm:"SVM (RBF)", rf:"Random Forest", mlp:"MLP"};
+const $ = (id) => document.getElementById(id);
+const fmt = (v, d=3) => (v==null || Number.isNaN(v)) ? "–" : Number(v).toFixed(d);
+const state = {model: CARD.main_model || "svm", thr: 0.5, current: null};
+
+// ---------------------------------------------------------------- metrics
+function metrics(y, p, thr){
+  let tp=0,tn=0,fp=0,fn=0;
+  y.forEach((t,i)=>{ const q = p[i] >= thr ? 1 : 0; if(t&&q)tp++; else if(!t&&!q)tn++; else if(!t&&q)fp++; else fn++; });
+  const sens=tp/(tp+fn), spec=tn/(tn+fp), prec=tp+fp?tp/(tp+fp):0, npv=tn+fn?tn/(tn+fn):0;
+  const f1=prec+sens?2*prec*sens/(prec+sens):0, f0=npv+spec?2*npv*spec/(npv+spec):0;
+  return {tp,tn,fp,fn,acc:(tp+tn)/y.length,sens,spec,prec,f1,mf1:(f1+f0)/2,icbhi:(sens+spec)/2};
+}
+function auc(y, p){
+  const pos=[],neg=[]; y.forEach((t,i)=>(t?pos:neg).push(p[i]));
+  let s=0; for(const a of pos) for(const b of neg) s += a>b ? 1 : a===b ? .5 : 0;
+  return s/(pos.length*neg.length);
+}
+const AUC = {}; for(const k of Object.keys(DATA.models)) AUC[k] = auc(DATA.test.label, DATA.test[k]);
+
+// ---------------------------------------------------------------- sidebar
+function buildSidebar(){
+  const box = $("modelRadio");
+  box.innerHTML = Object.keys(DATA.models).map(k=>`<label class="${k===state.model?"on":""}"><input type="radio" name="m" value="${k}" ${k===state.model?"checked":""}>${LABELS[k]}</label>`).join("");
+  box.querySelectorAll("input").forEach(i=>i.addEventListener("change",()=>{state.model=i.value; box.querySelectorAll("label").forEach(l=>l.classList.toggle("on", l.contains(i))); refresh();}));
+  $("thr").addEventListener("input", e=>{state.thr=+e.target.value; refresh();});
+  $("sideNote").textContent = `Trained on ${CARD.trained_on}. Test: ${CARD.test_set}.`;
+  if (CARD.synthetic_data) $("synthBanner").innerHTML = `<div class="banner">⚠️ These models were trained on SYNTHETIC smoke-test audio. Predictions and metrics are meaningless.</div>`;
+}
+function refresh(){
+  $("thrVal").textContent = state.thr.toFixed(2);
+  const m = metrics(DATA.test.label, DATA.test[state.model], state.thr);
+  $("tSens").textContent=fmt(m.sens,2); $("tSpec").textContent=fmt(m.spec,2); $("tF1").textContent=fmt(m.f1,2); $("tAuc").textContent=fmt(AUC[state.model],2);
+  $("tilesTitle").textContent = `Held-out test set · threshold ${state.thr.toFixed(2)}`;
+  $("xAcc").textContent=fmt(m.acc); $("xSens").textContent=fmt(m.sens); $("xSpec").textContent=fmt(m.spec); $("xF1").textContent=fmt(m.f1); $("xMf1").textContent=fmt(m.mf1);
+  drawCM(m); if (state.current) showResult();
+}
+function drawCM(m){
+  const rows=[[m.tn,m.fp],[m.fn,m.tp]], names=["non-COPD","COPD"];
+  const cell=(v,i)=>{ const tot=rows[i][0]+rows[i][1], f=tot?v/tot:0; const bg=`rgba(15,92,110,${0.08+0.85*f})`; return `<div class="c" style="background:${bg};color:${f>.55?"#fff":"#1d2733"}">${v}<small>${(100*f).toFixed(0)}%</small></div>`; };
+  $("cmBox").innerHTML = `<div class="cm"><div></div><div class="h">pred non-COPD</div><div class="h">pred COPD</div>
+    <div class="r">true non-COPD</div>${cell(rows[0][0],0)}${cell(rows[0][1],0)}<div class="r">true COPD</div>${cell(rows[1][0],1)}${cell(rows[1][1],1)}</div>`;
+  $("cmCap").textContent = `${LABELS[state.model]} at threshold ${state.thr.toFixed(2)} — move the slider on the left.`;
+}
+
+// ---------------------------------------------------------------- tabs
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x===b));
+  document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("on",p.id==="p-"+b.dataset.tab));
+  if (b.dataset.tab==="predict" && state.current) drawViews();
+}));
+document.querySelectorAll(".seg button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll(".seg button").forEach(x=>x.classList.toggle("on",x===b));
+  $("srcTest").style.display = b.dataset.src==="test" ? "" : "none";
+  $("srcUp").style.display = b.dataset.src==="upload" ? "" : "none";
+}));
+document.querySelectorAll("#viewTabs button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll("#viewTabs button").forEach(x=>x.classList.toggle("on",x===b));
+  document.querySelectorAll("[data-view]").forEach(v=>v.style.display = v.dataset.view===b.dataset.v ? "" : "none");
+  drawViews();
+}));
+
+// ---------------------------------------------------------------- example picker
+function b64ToBuf(b64){ const s=atob(b64), u=new Uint8Array(s.length); for(let i=0;i<s.length;i++) u[i]=s.charCodeAt(i); return u.buffer; }
+function buildPicker(){
+  const devs=[...new Set(DATA.examples.map(e=>e.device))].sort();
+  $("fDev").innerHTML = "<option>All</option>" + devs.map(d=>`<option>${d}</option>`).join("");
+  const fill=()=>{
+    const c=$("fClass").value, d=$("fDev").value;
+    const pool=DATA.examples.map((e,i)=>({e,i})).filter(({e})=>(c==="All"||(c==="COPD")===(e.label===1)) && (d==="All"||e.device===d));
+    $("pickLbl").textContent = `Recording (${pool.length} available)`;
+    $("pick").innerHTML = pool.map(({e,i})=>`<option value="${i}">${e.file} · ${e.diagnosis}</option>`).join("");
+    if (pool.length) loadExample(+$("pick").value);
+  };
+  $("fClass").addEventListener("change",fill); $("fDev").addEventListener("change",fill);
+  $("pick").addEventListener("change",()=>loadExample(+$("pick").value));
+  $("rand").addEventListener("click",()=>{ const o=$("pick").options; if(!o.length) return; const i=Math.floor(Math.random()*o.length); $("pick").selectedIndex=i; loadExample(+o[i].value); });
+  fill();
+}
+function parseName(name){
+  const p=name.replace(/\.wav$/i,"").split("_");
+  if (p.length===5 && /^\d+$/.test(p[0])) return {patient:p[0], loc:LOC[p[2]]||p[2], mode:p[3]==="mc"?"multichannel":"single channel", device:p[4]};
+  return null;
+}
+function runPipeline(x, sr){
+  const pre = DSP.preprocess(x, sr, C);
+  const ft = DSP.features(pre.yp, C);
+  return {x, sr, ...pre, ...ft};
+}
+function setBusy(b){ document.querySelector("main").classList.toggle("busy", b); }
+function loadExample(i){
+  const e = DATA.examples[i]; setBusy(true);
+  setTimeout(()=>{
+    const buf=b64ToBuf(e.audio), {x,sr}=DSP.decodeWav(buf);
+    const r=runPipeline(x,sr);
+    state.current = {...r, src:"test", ex:e, meta:{patient:e.patient, ...(parseName(e.file)||{}), device:e.device}};
+    setAudio("origAudio", buf); setBusy(false); showResult(); drawViews();
+  }, 20);
+}
+function setAudio(id, buf){ const a=$(id); if(a.dataset.url) URL.revokeObjectURL(a.dataset.url); const u=URL.createObjectURL(new Blob([buf],{type:"audio/wav"})); a.src=u; a.dataset.url=u; $("origWrap").style.display=""; }
+
+// upload
+const drop=$("drop");
+["dragover","dragenter"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add("over");}));
+["dragleave","drop"].forEach(ev=>drop.addEventListener(ev,()=>drop.classList.remove("over")));
+drop.addEventListener("drop",e=>{e.preventDefault(); if(e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);});
+$("file").addEventListener("change",e=>{ if(e.target.files[0]) handleFile(e.target.files[0]); });
+function handleFile(f){
+  setBusy(true);
+  f.arrayBuffer().then(buf=>{
+    let dec; try { dec = DSP.decodeWav(buf); } catch(err){ setBusy(false); $("resultBox").innerHTML=`<div class="warn">Could not read this file (${err.message}). Please use a PCM WAV file.</div>`; return; }
+    setTimeout(()=>{
+      const r=runPipeline(dec.x, dec.sr);
+      const p={}; for(const k of Object.keys(DATA.models)) p[k]=DSP.predict(DATA.models[k], r.vector);
+      state.current={...r, src:"upload", name:f.name, p, meta:parseName(f.name)};
+      setAudio("origAudio", buf); setBusy(false); showResult(); drawViews();
+    },20);
+  });
+}
+
+// ---------------------------------------------------------------- result card
+function showResult(){
+  const s=state.current; if(!s) return;
+  const p = s.src==="test" ? s.ex.p[state.model] : s.p[state.model];
+  const pred = p >= state.thr ? 1 : 0, name = pred ? "COPD" : "non-COPD";
+  const truth = s.src==="test" ? s.ex : null;
+  const m = s.meta;
+  let side = "";
+  if (truth) { const ok = truth.label===pred; side += `<div><b>True label:</b> ${truth.label?"COPD":"non-COPD"} (${truth.diagnosis})<br><span class="pill ${ok?"ok":"bad"}">${ok?"✓ correct":"✗ misclassified"}</span></div>`; }
+  if (m) side += `<div class="meta" style="margin-top:8px"><b>Patient</b> ${m.patient} · <b>${m.loc||""}</b>${m.mode?" · "+m.mode:""}<br><b>Device</b> ${DEV_NAMES[m.device]||m.device}</div>`;
+  const nat = s.src==="test" ? `${s.ex.native_sr} Hz · ${s.ex.duration} s (example stored at ${s.sr} Hz)` : `${s.sr} Hz · ${(s.x.length/s.sr).toFixed(1)} s`;
+  side += `<div class="meta"><span class="m">Native rate ${nat}</span></div>`;
+  const src = s.src==="test" ? "Probability from the trained Python model." : "Computed in your browser with the exported model (may differ slightly from Python).";
+  const warn = m && (m.device==="AKGC417L"||m.device==="Litt3200") ? `<div class="warn">In ICBHI this device was used <b>only for COPD patients</b>. A high P(COPD) may partly reflect device / recording characteristics rather than lung pathology (see Results → shortcut check).</div>` : "";
+  $("resultBox").innerHTML = `<div class="result"><div>
+      <div class="rcard" style="background:${COL[name]}"><div class="l">Prediction · ${LABELS[state.model]}</div><div class="v">${name}</div><div class="s">P(COPD) = ${p.toFixed(2)} · threshold ${state.thr.toFixed(2)}</div></div>
+      <div class="pbar"><div class="fill" style="width:${(100*p).toFixed(1)}%;background:${COL[name]}"></div><div class="thr" style="left:${(100*state.thr).toFixed(1)}%" title="threshold"></div></div>
+      <div class="pbar-lbl"><span>0</span><span>P(COPD) ${(100*p).toFixed(0)}% · black line = threshold</span><span>1</span></div>
+      <div class="hint">${src}</div></div><div>${side}</div></div>${warn}`;
+  $("seesBox").style.display="";
+}
+
+// ---------------------------------------------------------------- drawing helpers
+function ctx2d(id){
+  const c=$(id), dpr=window.devicePixelRatio||1, w=c.clientWidth||800, h=+c.getAttribute("height");
+  c.width=Math.round(w*dpr); c.height=Math.round(h*dpr); c.style.height=h+"px";
+  const g=c.getContext("2d"); g.setTransform(dpr,0,0,dpr,0,0); g.clearRect(0,0,w,h); g.font="12px "+getComputedStyle(document.body).fontFamily; return {g,w,h};
+}
+function axes(g, x0, y0, w, h, xt, yt, xlab, ylab){
+  g.strokeStyle="#c9c2b3"; g.lineWidth=1; g.beginPath(); g.moveTo(x0,y0); g.lineTo(x0,y0+h); g.lineTo(x0+w,y0+h); g.stroke();
+  g.fillStyle="#5b6470"; g.textAlign="center"; g.textBaseline="top";
+  xt.forEach(([v,t])=>{ g.fillText(t, x0+v*w, y0+h+4); });
+  g.textAlign="right"; g.textBaseline="middle"; yt.forEach(([v,t])=>g.fillText(t, x0-6, y0+h-v*h));
+  if (xlab){ g.textAlign="center"; g.textBaseline="top"; g.fillText(xlab, x0+w/2, y0+h+18); }
+  if (ylab){ g.save(); g.translate(12, y0+h/2); g.rotate(-Math.PI/2); g.textAlign="center"; g.fillText(ylab,0,0); g.restore(); }
+}
+function drawWave(g, y, sr, x0, y0, w, h, color, title){
+  g.fillStyle="#1d2733"; g.textAlign="left"; g.textBaseline="bottom"; g.font="600 12.5px "+getComputedStyle(document.body).fontFamily; g.fillText(title, x0, y0-4);
+  g.font="12px "+getComputedStyle(document.body).fontFamily;
+  let peak=0; for(const v of y) peak=Math.max(peak,Math.abs(v)); peak=peak||1;
+  g.strokeStyle=color; g.lineWidth=1; g.beginPath();
+  const n=y.length, cols=Math.floor(w);
+  for(let c=0;c<cols;c++){ const a=Math.floor(c*n/cols), b=Math.max(a+1,Math.floor((c+1)*n/cols)); let mn=1e9,mx=-1e9; for(let i=a;i<b;i++){ if(y[i]<mn)mn=y[i]; if(y[i]>mx)mx=y[i]; }
+    g.moveTo(x0+c+.5, y0+h/2-mx/peak*h/2); g.lineTo(x0+c+.5, y0+h/2-mn/peak*h/2); }
+  g.stroke();
+  const dur=n/sr, ticks=[]; const step=dur>12?5:2; for(let t=0;t<=dur+1e-6;t+=step) ticks.push([t/dur, t.toFixed(0)+" s"]);
+  axes(g,x0,y0,w,h,ticks,[],null,null);
+}
+function cmap(stops){ return (v)=>{ v=Math.min(1,Math.max(0,v)); const f=v*(stops.length-1), i=Math.min(stops.length-2,Math.floor(f)), t=f-i; const a=stops[i], b=stops[i+1]; return [0,1,2].map(k=>Math.round(a[k]+(b[k]-a[k])*t)); }; }
+const MAGMA=cmap([[0,0,4],[28,16,68],[79,18,123],[129,37,129],[181,54,122],[229,80,100],[251,135,97],[254,194,135],[252,253,191]]);
+const COOLWARM=cmap([[59,76,192],[98,130,234],[141,176,254],[184,208,249],[221,221,221],[245,196,173],[244,154,123],[222,96,77],[180,4,38]]);
+function heat(g, M, x0, y0, w, h, cm, vmin, vmax){
+  const R=M.length, T=M[0].length, img=g.createImageData(T,R);
+  for(let r=0;r<R;r++) for(let t=0;t<T;t++){ const [cr,cg,cb]=cm((M[r][t]-vmin)/(vmax-vmin)); const o=((R-1-r)*T+t)*4; img.data[o]=cr; img.data[o+1]=cg; img.data[o+2]=cb; img.data[o+3]=255; }
+  const off=document.createElement("canvas"); off.width=T; off.height=R; off.getContext("2d").putImageData(img,0,0);
+  g.imageSmoothingEnabled=true; g.drawImage(off, x0, y0, w, h);
+}
+function colorbar(g, x, y0, h, cm, lo, hi, unit){
+  for(let i=0;i<h;i++){ const [r,gg,b]=cm(1-i/h); g.fillStyle=`rgb(${r},${gg},${b})`; g.fillRect(x,y0+i,12,1); }
+  g.fillStyle="#5b6470"; g.textAlign="left"; g.textBaseline="middle"; g.fillText(hi+unit, x+16, y0+4); g.fillText(lo+unit, x+16, y0+h-4);
+}
+function welch(y, sr){
+  const n=1024, hop=512, win=new Float64Array(n); for(let i=0;i<n;i++) win[i]=0.5-0.5*Math.cos(2*Math.PI*i/n);
+  const P=new Float64Array(n/2+1); let cnt=0; const re=new Float64Array(n), im=new Float64Array(n);
+  for(let s=0;s+n<=y.length;s+=hop){ for(let i=0;i<n;i++){re[i]=y[s+i]*win[i]; im[i]=0;} fftLocal(re,im); for(let k=0;k<=n/2;k++) P[k]+=re[k]*re[k]+im[k]*im[k]; cnt++; }
+  return Array.from(P, v=>10*Math.log10(v/cnt+1e-20));
+}
+function fftLocal(re,im){ const n=re.length; for(let i=1,j=0;i<n;i++){let bit=n>>1; for(;j&bit;bit>>=1) j^=bit; j^=bit; if(i<j){[re[i],re[j]]=[re[j],re[i]];[im[i],im[j]]=[im[j],im[i]];}}
+  for(let len=2;len<=n;len<<=1){const a=-2*Math.PI/len,wr=Math.cos(a),wi=Math.sin(a); for(let i=0;i<n;i+=len){let cr=1,ci=0; for(let k=0;k<len/2;k++){const p=i+k,q=p+len/2; const tr=re[q]*cr-im[q]*ci, ti=re[q]*ci+im[q]*cr; re[q]=re[p]-tr; im[q]=im[p]-ti; re[p]+=tr; im[p]+=ti; const t=cr*wr-ci*wi; ci=cr*wi+ci*wr; cr=t;}}} }
+
+function drawViews(){
+  const s=state.current; if(!s) return;
+  const pred = (s.src==="test" ? s.ex.p[state.model] : s.p[state.model]) >= state.thr ? "COPD" : "non-COPD";
+  const col = COL[pred];
+  const vis = (id)=>$(id).offsetParent!==null;
+  if (vis("cWave")){ const {g,w,h}=ctx2d("cWave"); const L=50, W=w-L-16, H=(h-90)/2;
+    drawWave(g, s.x, s.sr, L, 22, W, H, "#8f8e88", `Raw (${s.sr} Hz)`);
+    drawWave(g, s.yp, C.target_sr, L, 22+H+50, W, H, col, `Preprocessed: ${C.target_sr} Hz · ${C.bandpass[0]}–${C.bandpass[1]} Hz band-pass · peak-normalised · ${C.duration_s} s`);
+    const a=$("preAudio"); if(a.dataset.url) URL.revokeObjectURL(a.dataset.url); const u=URL.createObjectURL(new Blob([DSP.encodeWav16(s.yp, C.target_sr)],{type:"audio/wav"})); a.src=u; a.dataset.url=u; }
+  if (vis("cSpec")){ const {g,w,h}=ctx2d("cSpec"); const L=56,T=14,W=w-L-16,H=h-T-46;
+    const a=welch(s.y4, C.target_sr), b=welch(s.yb, C.target_sr), all=a.concat(b), mx=Math.max(...all), mn=Math.max(Math.min(...all), mx-110);
+    const line=(arr,c,lw)=>{ g.strokeStyle=c; g.lineWidth=lw; g.beginPath(); arr.forEach((v,k)=>{ const X=L+k/(arr.length-1)*W, Y=T+H-(Math.max(v,mn)-mn)/(mx-mn)*H; k?g.lineTo(X,Y):g.moveTo(X,Y); }); g.stroke(); };
+    g.setLineDash([4,4]); g.strokeStyle="#5b6470"; C.bandpass.forEach(f=>{ const X=L+f/(C.target_sr/2)*W; g.beginPath(); g.moveTo(X,T); g.lineTo(X,T+H); g.stroke(); }); g.setLineDash([]);
+    line(a,"#c3c2b7",1.6); line(b,col,1.8);
+    const xt=[0,500,1000,1500,2000].map(f=>[f/2000, f+""]); const yt=[0,.5,1].map(v=>[v, (mn+v*(mx-mn)).toFixed(0)+" dB"]);
+    axes(g,L,T,W,H,xt,yt,"frequency (Hz)",null);
+    g.fillStyle="#c3c2b7"; g.fillRect(w-190,T+4,14,3); g.fillStyle="#5b6470"; g.textAlign="left"; g.textBaseline="middle"; g.fillText("before filter", w-170, T+6);
+    g.fillStyle=col; g.fillRect(w-190,T+22,14,3); g.fillStyle="#5b6470"; g.fillText("after band-pass", w-170, T+24); }
+  if (vis("cMel")){ const {g,w,h}=ctx2d("cMel"); const L=56,T=10,W=w-L-70,H=h-T-46;
+    heat(g, s.logmel, L, T, W, H, MAGMA, -80, 0); colorbar(g, L+W+10, T, H, MAGMA, -80, 0, " dB");
+    axes(g,L,T,W,H,[0,5,10,15,20].map(t=>[t/20,t+" s"]),[[0,"50 Hz"],[1,"2 kHz"]],"time",null);
+    $("melCap").textContent = `${C.mel_basis.length} mel bands, ${(1000*C.n_fft/C.target_sr).toFixed(0)} ms window, ${(1000*C.hop_length/C.target_sr).toFixed(0)} ms hop. Breathing cycles appear as vertical energy bursts; wheezes as horizontal lines; crackles as short vertical streaks.`; }
+  if (vis("cMfcc")){ const {g,w,h}=ctx2d("cMfcc"); const L=56,T=10,W=w-L-70,H=h-T-46;
+    const Z=s.mfcc.map(r=>{ let m=0; for(const v of r) m+=v; m/=r.length; let sd=0; for(const v of r) sd+=(v-m)**2; sd=Math.sqrt(sd/r.length)+1e-8; return r.map(v=>(v-m)/sd); });
+    heat(g, Z, L, T, W, H, COOLWARM, -3, 3); colorbar(g, L+W+10, T, H, COOLWARM, -3, 3, "");
+    axes(g,L,T,W,H,[0,5,10,15,20].map(t=>[t/20,t+" s"]),[[0,"1"],[1,String(C.n_mfcc)]],"time","MFCC index");
+    $("mfccCap").textContent = `Shown z-scored per coefficient for visibility. ${C.n_mfcc} MFCCs (+ deltas) are summarised by their mean and standard deviation over time → a ${4*C.n_mfcc}-value vector, the classifier's only input.`; }
+}
+window.addEventListener("resize", ()=>{ clearTimeout(window.__r); window.__r=setTimeout(drawViews,150); });
+
+// ---------------------------------------------------------------- results / dataset / about
+function table(id, cols, rows, rowClass){
+  $(id).innerHTML = `<thead><tr>${cols.map((c,i)=>`<th class="${i===0||c.l?"l":""}">${c.h}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr class="${rowClass?rowClass(r):""}">${cols.map((c,i)=>{ const v=typeof c.k==="function"?c.k(r):r[c.k]; return `<td class="${i===0||c.l?"l":""}">${typeof v==="number"?fmt(v,c.d??3):(v??"–")}</td>`; }).join("")}</tr>`).join("")}</tbody>`;
+}
+function svgBars(groups, series, colors, maxV, opts={}){
+  const W=520, H=opts.h||240, L=40, B=48, T=24, gw=(W-L-10)/groups.length, bw=Math.min(54,(gw-24)/series.length);
+  let s=`<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" style="max-width:${W}px;font-family:inherit">`;
+  for(let i=0;i<=4;i++){ const v=maxV*i/4, y=T+(H-T-B)*(1-i/4); s+=`<line x1="${L}" x2="${W-10}" y1="${y}" y2="${y}" stroke="#ebe5d8"/><text x="${L-6}" y="${y+4}" font-size="11" fill="#5b6470" text-anchor="end">${opts.int?Math.round(v):v.toFixed(2)}</text>`; }
+  if (opts.ref!=null){ const y=T+(H-T-B)*(1-opts.ref/maxV); s+=`<line x1="${L}" x2="${W-10}" y1="${y}" y2="${y}" stroke="#8a919a" stroke-dasharray="4 4"/>`; }
+  groups.forEach((g,gi)=>{ const cx=L+gw*gi+gw/2, x0=cx-bw*series.length/2-2*(series.length-1)/2;
+    series.forEach((v,si)=>{ const val=v[gi], hh=(H-T-B)*val/maxV, x=x0+si*(bw+2), y=T+(H-T-B)-hh;
+      s+=`<rect x="${x}" y="${y}" width="${bw}" height="${Math.max(0,hh)}" rx="4" fill="${colors[si]}"><title>${g.replace(/\n/g," ")}: ${opts.int?val:val.toFixed(3)}</title></rect><text x="${x+bw/2}" y="${y-5}" font-size="12" font-weight="700" fill="#1d2733" text-anchor="middle">${opts.int?val:val.toFixed(2)}</text>`; });
+    g.split("\n").forEach((line,li)=>{ s+=`<text x="${cx}" y="${H-B+16+li*14}" font-size="11.5" fill="#3d4550" text-anchor="middle">${line}</text>`; }); });
+  return s+"</svg>";
+}
+function buildResults(){
+  const rm=DATA.results_main;
+  table("tblMain",[{h:"Model",k:"model"},{h:"Features",k:"features",l:1},{h:"Aug.",k:"augmentation",l:1},{h:"Accuracy",k:"accuracy"},{h:"Precision",k:"precision"},{h:"Sensitivity",k:"recall"},{h:"Specificity",k:"specificity"},{h:"F1",k:"f1"},{h:"Macro F1",k:"macro_f1"},{h:"AUC",k:"auc"},{h:"ICBHI",k:"icbhi_score"}],
+    rm, r=>r.run==="svm_mfcc_aug"?"main":r.run==="device_only"?"dev":"");
+  const dev=rm.find(r=>r.run==="device_only"), svm=rm.find(r=>r.run==="svm_mfcc_aug");
+  const dm=DATA.results_dm, dmS=dm.find(r=>/pooled out-of-fold/.test(r.model)), dmD=dm.find(r=>/Device-only/.test(r.model));
+  $("shortcutBox").innerHTML = dev ? `<b>Shortcut check:</b> a rule that only looks at the <i>recording device</i> — no audio at all — reaches accuracy <b>${fmt(dev.accuracy,3)}</b> on this test set, higher than the SVM (${fmt(svm.accuracy,3)}). In ICBHI the AKG C417L and Littmann 3200 were used only for COPD patients, so high scores on this split do not prove that a model hears COPD. Experiment 2 removes this shortcut.` : "";
+  if (svm && dev && dmS && dmD) $("shortcutChart").innerHTML = svgBars(["Exp. 1\nofficial split, all devices","Exp. 2\nMeditron + Littmann C2SE"], [[svm.icbhi_score, dmS.icbhi_score],[dev.icbhi_score, dmD.icbhi_score]], [TEAL, CORAL], 1, {ref:.5});
+  table("tblDev",[{h:"Device",k:r=>DEV_NAMES[r.device]||r.device},{h:"True class",k:"label_name",l:1},{h:"Recordings",k:"recordings",d:0},{h:"Accuracy",k:"accuracy"}], DATA.per_device);
+  table("tblDm",[{h:"Model",k:"model"},{h:"Accuracy",k:"accuracy"},{h:"Precision",k:"precision"},{h:"Sensitivity",k:"recall"},{h:"Specificity",k:"specificity"},{h:"F1",k:"f1"},{h:"Macro F1",k:"macro_f1"},{h:"AUC",k:"auc"},{h:"ICBHI",k:"icbhi_score"}], dm, r=>/Device/.test(r.model)?"dev":/pooled/.test(r.model)?"main":"");
+}
+function buildDataset(){
+  const d=DATA.dataset;
+  const nC=d.split.filter(r=>r.label_name==="COPD").reduce((a,r)=>a+r.recordings,0), nN=d.split.filter(r=>r.label_name!=="COPD").reduce((a,r)=>a+r.recordings,0);
+  $("dsStats").innerHTML = [["Recordings",d.n_rec],["Patients",d.n_pat],["COPD recordings",nC],["non-COPD recordings",nN]].map(([k,v])=>`<div class="tile"><div class="k">${k}</div><div class="v">${v}</div></div>`).join("");
+  table("tblDx",[{h:"Diagnosis",k:"diagnosis"},{h:"Recordings",k:"recordings",d:0},{h:"Patients",k:"patients",d:0}], d.by_dx);
+  table("tblSplit",[{h:"Class",k:"label_name"},{h:"Partition",k:"split",l:1},{h:"Recordings",k:"recordings",d:0},{h:"Patients",k:"patients",d:0}], d.split);
+  const srCols=Object.keys(d.sr[0]||{}).filter(k=>k!=="device");
+  table("tblSr",[{h:"Device",k:r=>DEV_NAMES[r.device]||r.device}].concat(srCols.map(c=>({h:c,k:c,d:0}))), d.sr);
+  $("devChart").innerHTML = svgBars(d.device.map(r=>(DEV_NAMES[r.device]||r.device).replace(" microphone","").replace(" electronic","").replace("WelchAllyn ","").replace("Littmann Classic II SE","Littmann C2SE")),
+    [d.device.map(r=>r["non-COPD"]||0), d.device.map(r=>r["COPD"]||0)], ["#2a78d6", CORAL], Math.ceil(Math.max(...d.device.map(r=>r.COPD||0))/200)*200, {int:true, h:260});
+}
+function buildAbout(){
+  $("p-about").innerHTML = `
+  <h2>Reference paper</h2>
+  <p>Srivastava A., Jain S., Miranda R., Patil S., Pandya S., Kotecha K. <i>Deep learning based respiratory sound analysis for detection of chronic obstructive pulmonary disease.</i> PeerJ Computer Science 7:e369, 2021. DOI 10.7717/peerj-cs.369 · code: github.com/ArpanSriv/copd-research</p>
+  <h2>What this demo does</h2>
+  <p><b>Task:</b> ${CARD.task}. The label is the patient's <i>diagnosis</i>, attached to every recording of that patient — this is disease prediction, <b>not</b> detection of sound events such as crackles or wheezes.</p>
+  <h4>Differences from the paper</h4>
+  <div class="tw"><table><thead><tr><th class="l">Step</th><th class="l">Paper</th><th class="l">This implementation</th></tr></thead><tbody>
+  <tr><td class="l">Sampling rate</td><td class="l">22 050 Hz</td><td class="l">${C.target_sr} Hz (lowest native ICBHI rate)</td></tr>
+  <tr><td class="l">Filtering</td><td class="l">none</td><td class="l">${C.bandpass[0]}–${C.bandpass[1]} Hz band-pass</td></tr>
+  <tr><td class="l">Length</td><td class="l">20 s, zero-pad</td><td class="l">20 s, wrap-pad</td></tr>
+  <tr><td class="l">Features</td><td class="l">40×862 MFCC image</td><td class="l">40 MFCC + Δ, mean &amp; std (160 values)</td></tr>
+  <tr><td class="l">Classifier</td><td class="l">4-block 2-D CNN</td><td class="l">SVM (RBF); Random Forest and MLP for comparison</td></tr>
+  <tr><td class="l">Augmentation</td><td class="l">features of the original reused</td><td class="l">features recomputed, training set only</td></tr>
+  <tr><td class="l">Split</td><td class="l">official split (2 patients in both parts)</td><td class="l">patient-disjoint official split</td></tr></tbody></table></div>
+  <h4>Limitations</h4>
+  <ul><li>Device confound: AKG C417L and Littmann 3200 recordings are 100% COPD.</li>
+  <li>Small minority class: 127 non-COPD recordings; the test set has only 32 of them.</li>
+  <li>Diagnosis label ≠ sound content: a COPD patient's recording can sound normal.</li>
+  <li>Uploaded files are processed by a browser re-implementation of the Python pipeline; probabilities can differ slightly.</li>
+  <li>Educational demo — <b>not</b> a diagnostic tool.</li></ul>`;
+}
+function buildParams(){
+  const m=CARD.models[state.model]||{};
+  $("paramTbl").innerHTML = `<thead><tr><th class="l">Step</th><th class="l">Setting</th></tr></thead><tbody>
+  <tr><td class="l">Resampling</td><td class="l">native rate → ${C.target_sr} Hz</td></tr>
+  <tr><td class="l">Band-pass</td><td class="l">Butterworth order 4, ${C.bandpass[0]}–${C.bandpass[1]} Hz, zero-phase</td></tr>
+  <tr><td class="l">Normalisation</td><td class="l">DC removal + peak amplitude 1</td></tr>
+  <tr><td class="l">Length</td><td class="l">first ${C.duration_s} s (shorter recordings wrap-padded)</td></tr>
+  <tr><td class="l">Features</td><td class="l">${C.n_mfcc} MFCC + Δ, mean &amp; std → ${4*C.n_mfcc} values</td></tr>
+  <tr><td class="l">Classifiers</td><td class="l">${Object.keys(CARD.models).map(k=>`${CARD.models[k].label}: ${Object.entries(CARD.models[k].params).map(([a,b])=>a.replace(/clf__(estimator__)?/,"")+"="+b).join(", ")}`).join("<br>")}</td></tr></tbody>`;
+}
+
+buildSidebar(); buildResults(); buildDataset(); buildAbout(); buildParams(); refresh(); buildPicker();
+</script>
+</body>
+</html>

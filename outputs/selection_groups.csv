@@ -1,0 +1,5 @@
+method,mfcc,melspec,spectral,wavelet
+ANOVA F (k=40),0.425,0.455,0.095,0.025
+Mutual information (k=40),0.39,0.42,0.15,0.04
+Random-forest rank (k=40),0.47,0.335,0.12,0.075
+L1 logistic regression,0.792,0.117,0.091,0.0

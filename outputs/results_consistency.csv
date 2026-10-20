@@ -1,0 +1,12 @@
+experiment,features,augmentation,recordings,accuracy,recall,specificity,macro_f1,auc,icbhi_score,acc_fold_std,table
+Exp. 1 · all devices,mfcc,no,920,0.9348,0.9735,0.6929,0.8542,0.9554,0.8332,0.022,A
+Exp. 1 · all devices,mfcc,yes,920,0.9033,0.9155,0.8268,0.8223,0.9466,0.8711,0.013,A
+Exp. 1 · all devices,spectral+wavelet,no,920,0.912,0.966,0.5748,0.7965,0.9482,0.7704,0.028,A
+Exp. 1 · all devices,spectral+wavelet,yes,920,0.8891,0.9105,0.7559,0.7935,0.938,0.8332,0.047,A
+Exp. 1 · all devices,mfcc+melspec+spectral+wavelet,no,920,0.9293,0.966,0.7008,0.8459,0.9574,0.8334,0.032,A
+Exp. 1 · all devices,mfcc+melspec+spectral+wavelet,yes,920,0.938,0.9445,0.8976,0.8817,0.9688,0.9211,0.027,A
+Exp. 1 · all devices,device only (no audio),no,920,0.9217,0.9546,0.7165,0.8356,0.9538,0.8356,0.033,A
+Exp. 2 · Meditron + Littmann C2SE,mfcc,no,214,0.7243,0.6552,0.7717,0.7138,0.8162,0.7134,0.105,A
+Exp. 2 · Meditron + Littmann C2SE,spectral+wavelet,no,214,0.7944,0.7011,0.8583,0.7835,0.8524,0.7797,0.104,A
+Exp. 2 · Meditron + Littmann C2SE,mfcc+melspec+spectral+wavelet,no,214,0.7523,0.6552,0.8189,0.7398,0.8421,0.737,0.108,A
+Exp. 2 · Meditron + Littmann C2SE,device only (no audio),no,214,0.6636,0.5862,0.7165,0.6514,0.5456,0.6514,0.204,A

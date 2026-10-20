@@ -1,0 +1,272 @@
+method,feature,group,folds_selected
+ANOVA F,contrast_3_mean,spectral,5
+ANOVA F,mel27_std,melspec,5
+ANOVA F,mel29_std,melspec,5
+ANOVA F,mel28_std,melspec,5
+ANOVA F,dmfcc4_std,mfcc,5
+ANOVA F,dmfcc3_std,mfcc,5
+ANOVA F,dmfcc0_std,mfcc,5
+ANOVA F,dmfcc8_std,mfcc,5
+ANOVA F,mel15_std,melspec,5
+ANOVA F,mfcc6_std,mfcc,5
+ANOVA F,mfcc4_std,mfcc,5
+ANOVA F,mfcc3_std,mfcc,5
+ANOVA F,mel16_std,melspec,5
+ANOVA F,dmfcc7_std,mfcc,5
+ANOVA F,dmfcc6_std,mfcc,5
+ANOVA F,dmfcc5_std,mfcc,5
+ANOVA F,mfcc5_std,mfcc,4
+ANOVA F,mel11_std,melspec,4
+ANOVA F,mel26_std,melspec,4
+ANOVA F,mel17_std,melspec,4
+ANOVA F,dmfcc1_std,mfcc,4
+ANOVA F,mel63_mean,melspec,4
+ANOVA F,mfcc39_mean,mfcc,4
+ANOVA F,mel55_std,melspec,4
+ANOVA F,mfcc4_mean,mfcc,4
+ANOVA F,contrast_3_std,spectral,4
+ANOVA F,mfcc7_mean,mfcc,4
+ANOVA F,mel60_std,melspec,3
+ANOVA F,mel56_std,melspec,3
+ANOVA F,mel62_std,melspec,3
+ANOVA F,mel53_std,melspec,3
+ANOVA F,mel54_std,melspec,3
+ANOVA F,mel13_std,melspec,3
+ANOVA F,mel14_std,melspec,3
+ANOVA F,centroid_std,spectral,3
+ANOVA F,mel63_std,melspec,3
+ANOVA F,dmfcc2_std,mfcc,3
+ANOVA F,mel12_std,melspec,3
+ANOVA F,mel57_std,melspec,3
+ANOVA F,flux_mean,spectral,2
+ANOVA F,mfcc33_mean,mfcc,2
+ANOVA F,mel59_std,melspec,2
+ANOVA F,rolloff_std,spectral,2
+ANOVA F,A5_entropy,wavelet,2
+ANOVA F,mfcc20_mean,mfcc,2
+ANOVA F,A5_log_energy,wavelet,2
+ANOVA F,mel58_std,melspec,2
+ANOVA F,contrast_4_std,spectral,2
+ANOVA F,mfcc1_std,mfcc,1
+ANOVA F,mfcc0_std,mfcc,1
+ANOVA F,mfcc38_mean,mfcc,1
+ANOVA F,mfcc34_mean,mfcc,1
+ANOVA F,mel49_std,melspec,1
+ANOVA F,mel50_std,melspec,1
+ANOVA F,mel41_std,melspec,1
+ANOVA F,mel23_std,melspec,1
+ANOVA F,mel7_std,melspec,1
+ANOVA F,mel30_std,melspec,1
+ANOVA F,mel25_std,melspec,1
+ANOVA F,contrast_0_mean,spectral,1
+ANOVA F,mfcc18_mean,mfcc,1
+ANOVA F,mfcc22_mean,mfcc,1
+ANOVA F,mel51_std,melspec,1
+ANOVA F,mel52_std,melspec,1
+ANOVA F,dmfcc12_std,mfcc,1
+ANOVA F,dmfcc13_std,mfcc,1
+ANOVA F,mel8_std,melspec,1
+ANOVA F,mel10_std,melspec,1
+ANOVA F,mel24_std,melspec,1
+ANOVA F,D1_log_energy,wavelet,1
+Mutual information,mfcc18_mean,mfcc,5
+Mutual information,contrast_4_std,spectral,5
+Mutual information,contrast_0_mean,spectral,5
+Mutual information,mfcc34_mean,mfcc,5
+Mutual information,mfcc5_std,mfcc,5
+Mutual information,mfcc4_std,mfcc,5
+Mutual information,mel16_std,melspec,5
+Mutual information,dmfcc6_std,mfcc,5
+Mutual information,mfcc4_mean,mfcc,5
+Mutual information,mel19_std,melspec,4
+Mutual information,mfcc6_std,mfcc,4
+Mutual information,mel27_std,melspec,4
+Mutual information,mel60_std,melspec,4
+Mutual information,rolloff_std,spectral,4
+Mutual information,mel59_std,melspec,4
+Mutual information,contrast_3_mean,spectral,4
+Mutual information,dmfcc0_std,mfcc,4
+Mutual information,dmfcc3_std,mfcc,4
+Mutual information,mel29_std,melspec,3
+Mutual information,mel28_std,melspec,3
+Mutual information,mel51_std,melspec,3
+Mutual information,mel55_std,melspec,3
+Mutual information,mel54_std,melspec,3
+Mutual information,mfcc1_std,mfcc,3
+Mutual information,mel10_std,melspec,3
+Mutual information,mel11_std,melspec,3
+Mutual information,mel62_mean,melspec,3
+Mutual information,dmfcc7_std,mfcc,3
+Mutual information,mfcc3_std,mfcc,2
+Mutual information,mel49_std,melspec,2
+Mutual information,mfcc33_mean,mfcc,2
+Mutual information,mfcc39_mean,mfcc,2
+Mutual information,mel12_std,melspec,2
+Mutual information,mel17_std,melspec,2
+Mutual information,mel25_std,melspec,2
+Mutual information,mel47_std,melspec,2
+Mutual information,mel62_std,melspec,2
+Mutual information,mel63_std,melspec,2
+Mutual information,mel57_std,melspec,2
+Mutual information,mel56_std,melspec,2
+Mutual information,mel58_std,melspec,2
+Mutual information,mel52_std,melspec,2
+Mutual information,mel50_std,melspec,2
+Mutual information,mfcc22_mean,mfcc,2
+Mutual information,A5_entropy,wavelet,2
+Mutual information,flux_mean,spectral,2
+Mutual information,rms_std,spectral,2
+Mutual information,D3_log_energy,wavelet,2
+Mutual information,mel15_std,melspec,2
+Mutual information,dmfcc4_std,mfcc,2
+Mutual information,flatness_std,spectral,2
+Mutual information,dmfcc5_std,mfcc,2
+Mutual information,D3_std,wavelet,2
+Mutual information,dmfcc29_mean,mfcc,2
+Mutual information,mfcc3_mean,mfcc,2
+Mutual information,mfcc15_mean,mfcc,2
+Mutual information,mel48_std,melspec,1
+Mutual information,mfcc38_mean,mfcc,1
+Mutual information,centroid_std,spectral,1
+Mutual information,mfcc20_mean,mfcc,1
+Mutual information,zcr_std,spectral,1
+Mutual information,mfcc29_mean,mfcc,1
+Mutual information,zcr_mean,spectral,1
+Mutual information,contrast_1_mean,spectral,1
+Mutual information,mel8_std,melspec,1
+Mutual information,mel5_std,melspec,1
+Mutual information,mel30_std,melspec,1
+Mutual information,mel21_std,melspec,1
+Mutual information,mel24_std,melspec,1
+Mutual information,mel34_std,melspec,1
+Mutual information,mel41_std,melspec,1
+Mutual information,mel46_std,melspec,1
+Mutual information,mel32_std,melspec,1
+Mutual information,mfcc8_std,mfcc,1
+Mutual information,contrast_3_std,spectral,1
+Mutual information,bandwidth_mean,spectral,1
+Mutual information,mfcc28_mean,mfcc,1
+Mutual information,dmfcc18_std,mfcc,1
+Mutual information,dmfcc29_std,mfcc,1
+Mutual information,dmfcc35_std,mfcc,1
+Mutual information,dmfcc18_mean,mfcc,1
+Mutual information,dmfcc1_std,mfcc,1
+Mutual information,mel36_mean,melspec,1
+Mutual information,mel1_mean,melspec,1
+Mutual information,mel13_mean,melspec,1
+Mutual information,dmfcc25_mean,mfcc,1
+Mutual information,mfcc7_mean,mfcc,1
+Mutual information,D2_entropy,wavelet,1
+Mutual information,D1_mean_abs,wavelet,1
+Random-forest rank,mfcc22_mean,mfcc,5
+Random-forest rank,mfcc34_mean,mfcc,5
+Random-forest rank,mfcc3_std,mfcc,5
+Random-forest rank,mel56_std,melspec,5
+Random-forest rank,mel60_std,melspec,5
+Random-forest rank,mel63_std,melspec,5
+Random-forest rank,dmfcc5_std,mfcc,5
+Random-forest rank,dmfcc3_std,mfcc,5
+Random-forest rank,dmfcc6_std,mfcc,5
+Random-forest rank,contrast_0_mean,spectral,4
+Random-forest rank,mfcc6_std,mfcc,4
+Random-forest rank,mfcc5_std,mfcc,4
+Random-forest rank,mel57_std,melspec,4
+Random-forest rank,mfcc39_mean,mfcc,4
+Random-forest rank,flux_mean,spectral,4
+Random-forest rank,mfcc18_mean,mfcc,4
+Random-forest rank,mel63_mean,melspec,4
+Random-forest rank,mel59_std,melspec,4
+Random-forest rank,mfcc20_mean,mfcc,4
+Random-forest rank,mfcc4_mean,mfcc,4
+Random-forest rank,dmfcc4_std,mfcc,4
+Random-forest rank,contrast_3_mean,spectral,4
+Random-forest rank,contrast_4_std,spectral,4
+Random-forest rank,mel54_std,melspec,3
+Random-forest rank,mfcc4_std,mfcc,3
+Random-forest rank,mel52_std,melspec,3
+Random-forest rank,mfcc38_std,mfcc,3
+Random-forest rank,mel55_std,melspec,3
+Random-forest rank,mel14_std,melspec,3
+Random-forest rank,mel28_std,melspec,3
+Random-forest rank,mel58_std,melspec,3
+Random-forest rank,mel62_std,melspec,3
+Random-forest rank,contrast_3_std,spectral,3
+Random-forest rank,mfcc7_mean,mfcc,3
+Random-forest rank,dmfcc7_std,mfcc,3
+Random-forest rank,dmfcc0_std,mfcc,3
+Random-forest rank,A5_std,wavelet,3
+Random-forest rank,A5_log_energy,wavelet,3
+Random-forest rank,mel53_std,melspec,2
+Random-forest rank,mel50_std,melspec,2
+Random-forest rank,rolloff_std,spectral,2
+Random-forest rank,mel27_std,melspec,2
+Random-forest rank,mfcc33_std,mfcc,2
+Random-forest rank,mfcc22_std,mfcc,2
+Random-forest rank,mel62_mean,melspec,2
+Random-forest rank,mel49_std,melspec,2
+Random-forest rank,mfcc38_mean,mfcc,2
+Random-forest rank,centroid_std,spectral,2
+Random-forest rank,D3_std,wavelet,2
+Random-forest rank,mfcc31_mean,mfcc,2
+Random-forest rank,A5_kurtosis,wavelet,2
+Random-forest rank,D3_mean_abs,wavelet,2
+Random-forest rank,D4_rel_energy,wavelet,1
+Random-forest rank,mel16_std,melspec,1
+Random-forest rank,mel51_std,melspec,1
+Random-forest rank,mel61_std,melspec,1
+Random-forest rank,mfcc7_std,mfcc,1
+Random-forest rank,contrast_1_mean,spectral,1
+Random-forest rank,mfcc32_mean,mfcc,1
+Random-forest rank,mfcc33_mean,mfcc,1
+Random-forest rank,mfcc23_mean,mfcc,1
+Random-forest rank,mfcc28_mean,mfcc,1
+Random-forest rank,mfcc25_mean,mfcc,1
+Random-forest rank,A5_rel_energy,wavelet,1
+Random-forest rank,dmfcc12_std,mfcc,1
+Random-forest rank,mel15_std,melspec,1
+Random-forest rank,mel11_std,melspec,1
+Random-forest rank,mel17_std,melspec,1
+Random-forest rank,mel26_std,melspec,1
+Random-forest rank,mel20_std,melspec,1
+Random-forest rank,mel29_std,melspec,1
+Random-forest rank,mfcc32_std,mfcc,1
+Random-forest rank,mfcc1_mean,mfcc,1
+Random-forest rank,dmfcc1_std,mfcc,1
+Random-forest rank,dmfcc2_std,mfcc,1
+Random-forest rank,mfcc3_mean,mfcc,1
+Random-forest rank,mfcc12_mean,mfcc,1
+Random-forest rank,D2_mean_abs,wavelet,1
+L1 logistic regression,contrast_3_std,spectral,5
+L1 logistic regression,mel63_mean,melspec,5
+L1 logistic regression,dmfcc6_std,mfcc,5
+L1 logistic regression,dmfcc3_std,mfcc,5
+L1 logistic regression,mfcc31_mean,mfcc,4
+L1 logistic regression,mfcc39_mean,mfcc,4
+L1 logistic regression,mfcc20_mean,mfcc,4
+L1 logistic regression,mfcc12_mean,mfcc,4
+L1 logistic regression,dmfcc25_mean,mfcc,3
+L1 logistic regression,dmfcc4_mean,mfcc,3
+L1 logistic regression,mfcc7_mean,mfcc,3
+L1 logistic regression,mfcc24_mean,mfcc,3
+L1 logistic regression,dmfcc1_std,mfcc,2
+L1 logistic regression,dmfcc38_mean,mfcc,2
+L1 logistic regression,mel27_std,melspec,2
+L1 logistic regression,dmfcc7_std,mfcc,2
+L1 logistic regression,mfcc4_mean,mfcc,2
+L1 logistic regression,dmfcc36_mean,mfcc,2
+L1 logistic regression,mfcc14_mean,mfcc,2
+L1 logistic regression,contrast_1_mean,spectral,1
+L1 logistic regression,mfcc23_mean,mfcc,1
+L1 logistic regression,mfcc22_mean,mfcc,1
+L1 logistic regression,mel28_std,melspec,1
+L1 logistic regression,mel11_std,melspec,1
+L1 logistic regression,dmfcc12_std,mfcc,1
+L1 logistic regression,mfcc4_std,mfcc,1
+L1 logistic regression,dmfcc4_std,mfcc,1
+L1 logistic regression,mfcc34_mean,mfcc,1
+L1 logistic regression,dmfcc12_mean,mfcc,1
+L1 logistic regression,dmfcc1_mean,mfcc,1
+L1 logistic regression,mfcc25_mean,mfcc,1
+L1 logistic regression,flux_mean,spectral,1
+L1 logistic regression,mfcc29_std,mfcc,1
+L1 logistic regression,mfcc18_std,mfcc,1
