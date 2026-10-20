@@ -22,7 +22,7 @@ def is_synthetic(data_dir: Path) -> bool:
 def _config_hash(extra: str) -> str:
     keys = ["TARGET_SR", "BANDPASS_HZ", "FILTER_ORDER", "DURATION_S", "N_FFT", "HOP_LENGTH",
             "N_MELS", "N_MFCC", "FMIN", "FMAX", "LOUDNESS_RANGE", "SPEED_RANGE",
-            "MASK_FRACTION", "MAX_SHIFT_S", "RANDOM_SEED"]
+            "MASK_FRACTION", "MAX_SHIFT_S", "RANDOM_SEED", "FEATURE_VERSION"]
     blob = json.dumps({k: getattr(C, k) for k in keys}, default=str) + extra
     return hashlib.md5(blob.encode()).hexdigest()[:10]
 
@@ -70,4 +70,5 @@ def build_feature_table(df: pd.DataFrame, augment_mask: np.ndarray, tag: str,
 
 
 def matrix(table: pd.DataFrame, feature_set: str) -> np.ndarray:
-    return np.stack(table[f"feat_{feature_set}"].values)
+    """Feature matrix; combined sets like "mfcc+wavelet" are concatenated column-wise."""
+    return np.hstack([np.stack(table[f"feat_{part}"].values) for part in feature_set.split("+")])

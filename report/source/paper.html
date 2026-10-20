@@ -107,8 +107,9 @@
     0.92 sensitivity and 0.97 specificity. However, a rule that only reads the name of the recording device, without
     any audio, scored even higher (98.4% accuracy). When we used only the two devices that recorded both classes, the
     SVM reached 72.4% accuracy (ICBHI score 0.71). So a large part of the high score comes from the device, not from
-    the lungs.</p>
-    <div class="kw"><span class="label">Keywords</span>lung sounds · COPD · MFCC · SVM · ICBHI 2017 · shortcut learning</div>
+    the lungs. In an extension (Section 4), spectrogram and wavelet features raised this device-controlled score to
+    0.78, while automatic feature selection gave no clear extra gain.</p>
+    <div class="kw"><span class="label">Keywords</span>lung sounds · COPD · MFCC · wavelet · feature selection · SVM · ICBHI 2017 · shortcut learning</div>
   </div>
 </header>
 
@@ -126,7 +127,8 @@
   <ul>
     <li>a simple, reproducible pipeline with a patient-disjoint split;</li>
     <li>a comparison of three classifiers and three feature types;</li>
-    <li>a <i>shortcut check</i> that measures how much the recording device alone can predict.</li>
+    <li>a <i>shortcut check</i> that measures how much the recording device alone can predict;</li>
+    <li>an extension with spectrogram and wavelet features, feature selection and the same CV for both experiments.</li>
   </ul>
   <p>Our task predicts a <b class="t">disease label</b> (the diagnosis of the patient). It does not detect
   <b class="t">sound events</b> such as crackles or wheezes, which ICBHI also annotates.</p>
@@ -236,15 +238,95 @@
   recordings are about 20 s long, while COPD recordings last from 7.9 to 86.2 s; our fixed 20 s length reduces this
   effect. (4) We did not test the CNN of [1].</p>
 
-  <h2><span class="n">4</span>Conclusion</h2>
+  <h2><span class="n">4</span>Extended Experiments</h2>
+  <p>After the presentation we tested three ideas: new spectrogram and wavelet features, automatic feature selection,
+  and the same evaluation method for both experiments. We use the SVM and the protocol of Section 2, and no setting is
+  chosen on test data. Exp. 2 (device-controlled) is the main criterion.</p>
+
+  <p><span class="h3">New features.</span><i>Spectral</i> (24 values): mean and standard deviation of 12 frame-wise
+  descriptors — spectral centroid, bandwidth, roll-off, flatness, flux, zero-crossing rate, RMS energy and contrast in
+  five octave bands (62–2000 Hz). <i>Wavelet</i> (42 values): a 5-level discrete wavelet transform (db4,
+  PyWavelets [8]) splits the 4 kHz signal into six sub-bands from 0–62 Hz up to 1–2 kHz. For each band we compute log
+  energy, relative energy, mean absolute value, standard deviation, skewness, kurtosis and entropy. Combined sets are
+  simple concatenations; all sets together give 354 values.</p>
+
+  <p><span class="h3">Feature selection.</span>Starting from all 354 values, we tried the ANOVA F-test, mutual
+  information, random-forest ranking, L1 logistic regression and, for comparison, PCA. The selector is a step inside
+  the scikit-learn pipeline, so it is fitted only on the training part of each fold. The number of kept features
+  (20–160) is chosen by the inner CV.</p>
+
+  <p><span class="h3">Same CV for both experiments.</span>Exp. 1 now also uses 5-fold patient-grouped CV over all 920
+  recordings (augmentation only in the training folds), exactly like Exp. 2.</p>
+
+  <div class="tblock">
+    <div class="tcap"><b>Table 3.</b> Exp. 2 (214 recordings, 86 patients, 5-fold patient-grouped CV). n = number of
+    features. *Selection rows use a smaller SVM grid; with the same grid, “no selection” scores 0.756.</div>
+    <table>
+      <thead><tr><th class="l">Features</th><th>n</th><th>Acc</th><th>Sens</th><th>Spec</th><th>AUC</th><th>ICBHI</th></tr></thead>
+      <tbody>
+        <tr><td>MFCC (Section 3)</td><td>160</td><td>0.724</td><td>0.655</td><td>0.772</td><td>0.816</td><td>0.713</td></tr>
+        <tr><td>Spectral</td><td>24</td><td>0.776</td><td>0.736</td><td>0.803</td><td>0.844</td><td>0.769</td></tr>
+        <tr><td>Wavelet</td><td>42</td><td>0.696</td><td>0.483</td><td>0.843</td><td>0.721</td><td>0.663</td></tr>
+        <tr><td>MFCC + spectral</td><td>184</td><td>0.771</td><td>0.759</td><td>0.779</td><td>0.844</td><td>0.769</td></tr>
+        <tr class="main"><td>Spectral + wavelet</td><td>66</td><td>0.794</td><td>0.701</td><td>0.858</td><td>0.852</td><td>0.780</td></tr>
+        <tr><td>All features</td><td>354</td><td>0.752</td><td>0.655</td><td>0.819</td><td>0.842</td><td>0.737</td></tr>
+        <tr><td>All + RF selection*</td><td>≈160</td><td>0.771</td><td>0.713</td><td>0.811</td><td>0.838</td><td>0.762</td></tr>
+        <tr><td>All + PCA*</td><td>≈48</td><td>0.776</td><td>0.678</td><td>0.843</td><td>0.841</td><td>0.760</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p><span class="h3">Effect of the new features.</span>Spectral + wavelet features gave the best device-controlled result: ICBHI 0.78
+  instead of 0.71 with MFCC, and specificity 0.86 instead of 0.77 (Table 3). Wavelet features alone were weak
+  (sensitivity 0.48), but they helped together with the spectral descriptors. Using all 354 values was worse (0.74):
+  with only 214 recordings, more features do not mean better results. Table 4 shows where the gain comes from. Within
+  the Meditron recordings both sets work well (about 0.83), but within the Littmann C2SE recordings MFCC is close to
+  chance (0.56) and spectral + wavelet reaches 0.69. So the gain happens inside one device; it is not a device effect.</p>
+
+  <div class="tblock">
+    <div class="tcap"><b>Table 4.</b> Exp. 2 ICBHI score computed separately for each device (out-of-fold predictions).</div>
+    <table>
+      <thead><tr><th class="l">Device</th><th>COPD / non-COPD</th><th>MFCC</th><th>Spectral + wavelet</th></tr></thead>
+      <tbody>
+        <tr><td>Meditron</td><td>36 / 91</td><td>0.840</td><td>0.831</td></tr>
+        <tr><td>Littmann C2SE</td><td>51 / 36</td><td>0.556</td><td>0.694</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p><span class="h3">Effect of feature selection.</span>Selection did not give a clear extra gain. The best tuned selector
+  (random forest, 0.762) was almost equal to no selection (0.756), and keeping only 20–40 features lowered the score for
+  most methods. The features chosen most often were standard deviations of mel bands and of ΔMFCC, that is, how much
+  the sound changes during breathing. Wavelet values were rarely chosen alone, although they helped in combination.</p>
+
+  <figure>
+    <img src="fig_extended.png" alt="ICBHI score of three feature sets and the device-only rule in both experiments">
+    <figcaption><b>Fig. 4.</b> ICBHI score with the same 5-fold patient-grouped CV in both experiments. The ranking of
+    the feature sets changes between Exp. 1 and Exp. 2.</figcaption>
+  </figure>
+
+  <p><span class="h3">Same CV and device checks.</span>With the same CV (Fig. 4), the device-only rule reaches 0.84 in
+  Exp. 1. Only MFCC (0.87) and all 354 features (0.92), both with augmentation, are above it, and the ranking of the
+  feature sets changes between the two experiments. Features should therefore be chosen on device-controlled data.
+  All feature sets can also predict the recording device well (balanced accuracy 0.83–0.85 for four devices, where
+  chance is 0.25), so device information is present in every representation. In the wavelet band energies, only the
+  125–250 Hz band shows a difference in the same direction on both devices (more energy in COPD recordings).</p>
+
+  <p><span class="h3">Limits of the extension.</span>The fold-to-fold standard deviation in Exp. 2 is about 0.10, so
+  differences below about 0.05 are not reliable. We see the gain of the spectral + wavelet features as a trend, not as
+  a proof.</p>
+
+  <h2><span class="n">5</span>Conclusion</h2>
   <p>We built a small and reproducible COPD vs non-COPD classifier for lung sounds with filtering, MFCC features and
   an SVM. On the official split it looks excellent (92.7% accuracy), but a device-only rule is even better. When we
   remove the device effect, accuracy falls to about 72%. Our main lesson is that the recording setup can hide inside
   the results of medical sound data, so simple baselines and patient-level splits are necessary. Next steps are more
-  balanced data from the same device and event-level labels such as crackles and wheezes.</p>
+  balanced data from the same device and event-level labels such as crackles and wheezes. In the extension, spectral and
+  wavelet descriptors raised the device-controlled ICBHI score from 0.71 to 0.78, mainly on the Littmann recordings,
+  while automatic feature selection did not help clearly.</p>
 
   <div class="ai"><p><span class="label">AI usage</span>We used an AI assistant (Claude, Anthropic) to analyse the
-  paper and its code, to write most of the Python code and the README, and to draft this paper. We ran all
+  paper and its code, to write most of the Python code and the README, and to draft this paper and its extension. We ran all
   experiments on the real data, checked every number against the program output, and we are responsible for the final
   text. Code: <span class="mono">github.com/Beyzanurguc/CSE470_HW1_COPD</span></p></div>
 
@@ -263,6 +345,8 @@
     pp. 2825–2830, 2011.</li>
     <li>ICBHI official split and device-name corrections, from github.com/raymin0223/patch-mix_contrastive_learning
     (data/icbhi_dataset).</li>
+    <li>G. R. Lee, R. Gommers, F. Wasilewski, K. Wohlfahrt, A. O’Leary, “PyWavelets: A Python package for wavelet
+    analysis,” <i>J. Open Source Softw.</i>, vol. 4, no. 36, 1237, 2019.</li>
   </ol>
 </main>
 </body>

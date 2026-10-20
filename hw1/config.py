@@ -32,6 +32,7 @@ HOP_LENGTH = 128        # 32 ms hop -> 626 frames for 20 s
 N_MELS = 64
 N_MFCC = 40             # paper uses n = 40 for every feature
 FMIN, FMAX = 50.0, 2000.0
+FEATURE_VERSION = 2       # bump when features.extract() changes (invalidates the feature cache)
 
 # ---------------------------------------------------------------- augmentation (training set only)
 AUGMENT_CLASS = 0               # the paper augments the minority (non-COPD) class
